@@ -1,7 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { SiteFooter } from '../components/site/SiteFooter';
-import { SiteHeader } from '../components/site/SiteHeader';
+import { SiteChrome } from '../components/site/SiteChrome';
 
 export const metadata: Metadata = {
   title: {
@@ -15,11 +14,9 @@ export default function RootLayout({
   children
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="ru">
       <body className="bg-black text-white antialiased">
-        <SiteHeader />
-        <main>{children}</main>
-        <SiteFooter />
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );
