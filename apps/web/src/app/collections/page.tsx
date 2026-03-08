@@ -4,20 +4,30 @@ export default function CollectionsPage() {
   return (
     <section className="bg-black text-white">
       <div className="mx-auto max-w-7xl px-6 py-20">
-        <div className="mb-4 text-xs uppercase tracking-[0.35em] text-white/50">
-          ROZEL
+        <div className="max-w-3xl">
+          <div className="text-xs uppercase tracking-[0.34em] text-white/42">
+            Collections
+          </div>
+          <h1 className="mt-4 text-4xl font-medium md:text-6xl">
+            The ROZEL collection universe.
+          </h1>
+          <p className="mt-6 text-base leading-7 text-white/62 md:text-lg">
+            Signature tailoring, private capsule releases, and evening studies
+            designed as distinct editorial worlds.
+          </p>
         </div>
 
-        <h1 className="text-4xl font-medium md:text-6xl">Collections</h1>
-
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-14 grid gap-6 md:grid-cols-3">
           {siteData.collections.map((item) => (
             <article
               key={item.slug}
-              className="rounded-3xl border border-white/10 p-6"
+              className="rounded-[2rem] border border-white/10 bg-white/[0.02] p-6"
             >
-              <h2 className="text-2xl font-medium">{item.title}</h2>
-              <p className="mt-3 text-sm leading-6 text-white/65">
+              <div className="text-xs uppercase tracking-[0.28em] text-white/40">
+                ROZEL
+              </div>
+              <h2 className="mt-5 text-2xl font-medium">{item.title}</h2>
+              <p className="mt-4 text-sm leading-7 text-white/62">
                 {item.description}
               </p>
             </article>
