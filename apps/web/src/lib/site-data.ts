@@ -22,9 +22,12 @@ type JournalItem = {
   excerpt: string
 }
 
+export type ProductCategory = 'outerwear' | 'evening' | 'capsule'
+
 export type ProductItem = {
   slug: string
   collection: string
+  category: ProductCategory
   badge: string
   title: string
   subtitle: string
@@ -64,6 +67,10 @@ type SiteContent = {
     productsEyebrow: string
     productsTitle: string
     productsLinkLabel: string
+    featuredEyebrow: string
+    featuredTitle: string
+    featuredText: string
+    featuredCta: string
   }
   highlights: HighlightItem[]
   collectionsPage: {
@@ -76,6 +83,14 @@ type SiteContent = {
     eyebrow: string
     title: string
     description: string
+    tabs: {
+      all: string
+      outerwear: string
+      evening: string
+      capsule: string
+    }
+    featuredTitle: string
+    featuredText: string
   }
   products: ProductItem[]
   productPage: {
@@ -160,7 +175,12 @@ const content: Record<Locale, SiteContent> = {
       viewAllLabel: 'Смотреть всё',
       productsEyebrow: 'Изделия',
       productsTitle: 'Первый product layer дома.',
-      productsLinkLabel: 'Открыть каталог'
+      productsLinkLabel: 'Открыть каталог',
+      featuredEyebrow: 'Featured',
+      featuredTitle: 'Избранное изделие сезона.',
+      featuredText:
+        'Витрина ROZEL строится не как список вещей, а как curated luxury-selection с сильной editorial-подачей.',
+      featuredCta: 'Открыть изделие'
     },
     highlights: [
       {
@@ -203,12 +223,22 @@ const content: Record<Locale, SiteContent> = {
       eyebrow: 'Каталог',
       title: 'Коллекционные изделия ROZEL.',
       description:
-        'Первый product layer дома: верхняя одежда, вечерние формы и точный тейлоринг, оформленные как luxury storefront.'
+        'Первый product layer дома: верхняя одежда, вечерние формы и точный тейлоринг, оформленные как luxury storefront.',
+      tabs: {
+        all: 'Все',
+        outerwear: 'Outerwear',
+        evening: 'Evening',
+        capsule: 'Capsule'
+      },
+      featuredTitle: 'Featured product direction',
+      featuredText:
+        'Следующий слой каталога — реальные изображения, sizes, availability и private-client product workflows.'
     },
     products: [
       {
         slug: 'noir-tailored-coat',
         collection: 'Noir Atelier',
+        category: 'outerwear',
         badge: 'Signature',
         title: 'Noir Tailored Coat',
         subtitle: 'Структурное пальто с жёсткой линией плеч',
@@ -226,6 +256,7 @@ const content: Record<Locale, SiteContent> = {
       {
         slug: 'atelier-silk-dress',
         collection: 'Evening Study',
+        category: 'evening',
         badge: 'Evening',
         title: 'Atelier Silk Dress',
         subtitle: 'Текучая вечерняя форма',
@@ -243,6 +274,7 @@ const content: Record<Locale, SiteContent> = {
       {
         slug: 'private-capsule-jacket',
         collection: 'Private Capsule',
+        category: 'capsule',
         badge: 'Limited',
         title: 'Private Capsule Jacket',
         subtitle: 'Ограниченный жакет editorial-линии',
@@ -364,7 +396,12 @@ const content: Record<Locale, SiteContent> = {
       viewAllLabel: 'View all',
       productsEyebrow: 'Products',
       productsTitle: 'The first product layer of the house.',
-      productsLinkLabel: 'Open catalog'
+      productsLinkLabel: 'Open catalog',
+      featuredEyebrow: 'Featured',
+      featuredTitle: 'The featured piece of the season.',
+      featuredText:
+        'The ROZEL storefront is built not as a list of items, but as a curated luxury selection with strong editorial framing.',
+      featuredCta: 'Open item'
     },
     highlights: [
       {
@@ -407,12 +444,22 @@ const content: Record<Locale, SiteContent> = {
       eyebrow: 'Catalog',
       title: 'ROZEL collection products.',
       description:
-        'The first product layer of the house: outerwear, evening forms, and precise tailoring framed as a luxury storefront.'
+        'The first product layer of the house: outerwear, evening forms, and precise tailoring framed as a luxury storefront.',
+      tabs: {
+        all: 'All',
+        outerwear: 'Outerwear',
+        evening: 'Evening',
+        capsule: 'Capsule'
+      },
+      featuredTitle: 'Featured product direction',
+      featuredText:
+        'The next catalog layer is real imagery, sizes, availability, and private-client product workflows.'
     },
     products: [
       {
         slug: 'noir-tailored-coat',
         collection: 'Noir Atelier',
+        category: 'outerwear',
         badge: 'Signature',
         title: 'Noir Tailored Coat',
         subtitle: 'Structured coat with a sharp shoulder line',
@@ -430,6 +477,7 @@ const content: Record<Locale, SiteContent> = {
       {
         slug: 'atelier-silk-dress',
         collection: 'Evening Study',
+        category: 'evening',
         badge: 'Evening',
         title: 'Atelier Silk Dress',
         subtitle: 'Fluid evening form',
@@ -447,6 +495,7 @@ const content: Record<Locale, SiteContent> = {
       {
         slug: 'private-capsule-jacket',
         collection: 'Private Capsule',
+        category: 'capsule',
         badge: 'Limited',
         title: 'Private Capsule Jacket',
         subtitle: 'Limited jacket from the editorial line',
