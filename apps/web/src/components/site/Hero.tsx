@@ -1,56 +1,74 @@
-import Link from 'next/link';
+import Link from 'next/link'
 import {
   Locale,
   getSiteContent,
   toLocalizedHref
-} from '../../lib/site-data';
+} from '../../lib/site-data'
+import { defaultCmsSnapshot } from '../../lib/cms-store'
 
 type HeroProps = {
-  locale: Locale;
-};
+  locale: Locale
+}
 
 export function Hero({ locale }: HeroProps) {
-  const siteData = getSiteContent(locale);
+  const siteData = getSiteContent(locale)
+
+  const hero =
+    locale === 'ru'
+      ? defaultCmsSnapshot.hero
+      : {
+          eyebrow: siteData.hero.eyebrow,
+          title: siteData.hero.title,
+          description: siteData.hero.description,
+          primaryLabel: siteData.hero.primaryCta.label,
+          primaryHref: siteData.hero.primaryCta.href,
+          secondaryLabel: siteData.hero.secondaryCta.label,
+          secondaryHref: siteData.hero.secondaryCta.href,
+          sideTopLabel: siteData.hero.sideTopLabel,
+          sideTopText: siteData.hero.sideTopText,
+          sideBottomLabel: siteData.hero.sideBottomLabel,
+          sideBottomText: siteData.hero.sideBottomText
+        }
 
   return (
     <section className="hero">
       <div className="container hero__grid">
         <div className="hero__copy">
-          <div className="eyebrow">{siteData.hero.eyebrow}</div>
+          <div className="eyebrow">{hero.eyebrow}</div>
 
-          <h1 className="hero__title">{siteData.hero.title}</h1>
+          <h1 className="hero__title">{hero.title}</h1>
 
-          <p className="hero__text">{siteData.hero.description}</p>
+          <p className="hero__text">{hero.description}</p>
 
           <div className="button-row">
             <Link
-              href={toLocalizedHref(locale, siteData.hero.primaryCta.href)}
+              href={toLocalizedHref(locale, hero.primaryHref)}
               className="btn btn--primary"
             >
-              {siteData.hero.primaryCta.label}
+              {hero.primaryLabel}
             </Link>
 
             <Link
-              href={toLocalizedHref(locale, siteData.hero.secondaryCta.href)}
+              href={toLocalizedHref(locale, hero.secondaryHref)}
               className="btn btn--ghost"
             >
-              {siteData.hero.secondaryCta.label}
+              {hero.secondaryLabel}
             </Link>
           </div>
         </div>
 
         <div className="hero__stack">
           <div className="panel panel--large">
-            <div className="panel__label">{siteData.hero.sideTopLabel}</div>
-            <div className="panel__text-large">{siteData.hero.sideTopText}</div>
+            <div className="panel__label">{hero.sideTopLabel}</div>
+            <div className="panel__text-large">{hero.sideTopText}</div>
           </div>
 
           <div className="panel panel--medium">
-            <div className="panel__label">{siteData.hero.sideBottomLabel}</div>
-            <div className="panel__text">{siteData.hero.sideBottomText}</div>
+            <div className="panel__label">{hero.sideBottomLabel}</div>
+            <div className="panel__text">{hero.sideBottomText}</div>
           </div>
         </div>
       </div>
     </section>
-  );
+  )
 }
