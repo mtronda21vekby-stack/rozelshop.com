@@ -1,9 +1,16 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { defaultCmsSnapshot, type CmsSnapshot } from '../../lib/cms-store'
 import { getSiteContent } from '../../lib/site-data'
 
-type AdminSection = 'dashboard' | 'products' | 'collections' | 'journal' | 'settings'
+type AdminSection =
+  | 'dashboard'
+  | 'products'
+  | 'collections'
+  | 'journal'
+  | 'homepage'
+  | 'settings'
 
 type AdminProduct = {
   id: string
@@ -102,6 +109,7 @@ function AdminSidebar({
 }) {
   const items: { key: AdminSection; label: string }[] = [
     { key: 'dashboard', label: 'Dashboard' },
+    { key: 'homepage', label: 'Homepage' },
     { key: 'products', label: 'Products' },
     { key: 'collections', label: 'Collections' },
     { key: 'journal', label: 'Journal' },
@@ -144,7 +152,7 @@ function DashboardView({
         <h1 className="page-title">Atelier CMS</h1>
         <p className="page-text">
           Private content layer for products, collections, editorial publishing,
-          and house settings.
+          homepage composition, and house settings.
         </p>
       </div>
 
@@ -167,21 +175,138 @@ function DashboardView({
 
       <div className="cms-grid-2">
         <article className="cms-panel">
-          <div className="cms-panel__label">Publishing Status</div>
-          <h2 className="cms-panel__title">House content is ready for structured editing.</h2>
+          <div className="cms-panel__label">Publishing status</div>
+          <h2 className="cms-panel__title">CMS domains are now separated.</h2>
           <p className="cms-panel__text">
-            This CMS layer is prepared for future API wiring: product CRUD,
-            collection editing, editorial publishing, and admin auth.
+            Homepage, products, collections, journal, and settings are isolated into
+            independent admin zones ready for future API binding.
           </p>
         </article>
 
         <article className="cms-panel">
           <div className="cms-panel__label">Next step</div>
-          <h2 className="cms-panel__title">Connect real backend and persistence.</h2>
+          <h2 className="cms-panel__title">Bind real persistence and auth.</h2>
           <p className="cms-panel__text">
-            The interface is already segmented into domains, so we can bind it
-            to Nest API and database without redesigning the admin shell.
+            The admin shell is ready for secure auth, backend CRUD, media handling,
+            and storefront sync.
           </p>
+        </article>
+      </div>
+    </div>
+  )
+}
+
+function HomepageView({
+  snapshot,
+  onUpdate
+}: {
+  snapshot: CmsSnapshot
+  onUpdate: (next: CmsSnapshot) => void
+}) {
+  const [draft, setDraft] = useState<CmsSnapshot>(snapshot)
+
+  function update<K extends keyof CmsSnapshot>(section: K, key: keyof CmsSnapshot[K], value: string) {
+    setDraft((prev) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [key]: value
+      }
+    }))
+  }
+
+  function handleSave(e: React.FormEvent) {
+    e.preventDefault()
+    onUpdate(draft)
+  }
+
+  return (
+    <div className="cms-stack">
+      <div>
+        <div className="eyebrow">Homepage</div>
+        <h1 className="page-title">Homepage Manager</h1>
+        <p className="page-text">
+          Control hero copy, featured messaging, and the main storefront narrative.
+        </p>
+      </div>
+
+      <div className="cms-grid-2">
+        <form onSubmit={handleSave} className="cms-panel">
+          <div className="cms-panel__label">Hero content</div>
+
+          <div className="cms-form">
+            <input
+              className="cms-input"
+              value={draft.hero.eyebrow}
+              onChange={(e) => update('hero', 'eyebrow', e.target.value)}
+              placeholder="Eyebrow"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.hero.title}
+              onChange={(e) => update('hero', 'title', e.target.value)}
+              placeholder="Hero title"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.hero.description}
+              onChange={(e) => update('hero', 'description', e.target.value)}
+              placeholder="Hero description"
+            />
+            <input
+              className="cms-input"
+              value={draft.home.introTitle}
+              onChange={(e) => update('home', 'introTitle', e.target.value)}
+              placeholder="Intro title"
+            />
+            <input
+              className="cms-input"
+              value={draft.home.productsTitle}
+              onChange={(e) => update('home', 'productsTitle', e.target.value)}
+              placeholder="Products title"
+            />
+            <input
+              className="cms-input"
+              value={draft.home.featuredTitle}
+              onChange={(e) => update('home', 'featuredTitle', e.target.value)}
+              placeholder="Featured title"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.home.featuredText}
+              onChange={(e) => update('home', 'featuredText', e.target.value)}
+              placeholder="Featured text"
+            />
+
+            <button type="submit" className="btn btn--primary">
+              Save snapshot
+            </button>
+          </div>
+        </form>
+
+        <article className="cms-panel">
+          <div className="cms-panel__label">Live preview</div>
+
+          <div className="cms-preview-card">
+            <div className="eyebrow">{draft.hero.eyebrow}</div>
+            <h2 className="cms-preview-card__title">{draft.hero.title}</h2>
+            <p className="cms-preview-card__text">{draft.hero.description}</p>
+
+            <div className="cms-preview-divider" />
+
+            <div className="cms-preview-card__label">Homepage intro</div>
+            <div className="cms-preview-card__text">{draft.home.introTitle}</div>
+
+            <div className="cms-preview-divider" />
+
+            <div className="cms-preview-card__label">Product section</div>
+            <div className="cms-preview-card__text">{draft.home.productsTitle}</div>
+
+            <div className="cms-preview-divider" />
+
+            <div className="cms-preview-card__label">Featured</div>
+            <div className="cms-preview-card__text">{draft.home.featuredTitle}</div>
+          </div>
         </article>
       </div>
     </div>
@@ -532,6 +657,7 @@ export default function AtelierPortalPage() {
   const [products, setProducts] = useState<AdminProduct[]>(initialProducts)
   const [collections, setCollections] = useState<AdminCollection[]>(initialCollections)
   const [journal, setJournal] = useState<AdminJournal[]>(initialJournal)
+  const [cmsSnapshot, setCmsSnapshot] = useState<CmsSnapshot>(defaultCmsSnapshot)
 
   const dashboardCounts = useMemo(
     () => ({
@@ -593,6 +719,10 @@ export default function AtelierPortalPage() {
                 collectionCount={dashboardCounts.collections}
                 journalCount={dashboardCounts.journal}
               />
+            )}
+
+            {section === 'homepage' && (
+              <HomepageView snapshot={cmsSnapshot} onUpdate={setCmsSnapshot} />
             )}
 
             {section === 'products' && (
