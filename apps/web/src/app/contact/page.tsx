@@ -1,33 +1,35 @@
-import { siteData } from '../../lib/site-data';
+import { getSiteContent } from '../../lib/site-data';
 
 export default function ContactPage() {
+  const siteData = getSiteContent('ru');
+
   return (
     <section className="bg-black text-white">
       <div className="mx-auto max-w-5xl px-6 py-20">
         <div className="text-xs uppercase tracking-[0.34em] text-white/42">
-          Contact
+          {siteData.contactPage.eyebrow}
         </div>
 
         <h1 className="mt-4 text-4xl font-medium md:text-6xl">
-          Client services and house contact.
+          {siteData.contactPage.title}
         </h1>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.02] p-6">
             <div className="text-xs uppercase tracking-[0.28em] text-white/40">
-              Email
+              {siteData.contactPage.emailLabel}
             </div>
             <div className="mt-4 text-2xl font-medium">
-              {siteData.contact.email}
+              {siteData.contactPage.email}
             </div>
           </div>
 
           <div className="rounded-[2rem] border border-white/10 bg-white/[0.02] p-6">
             <div className="text-xs uppercase tracking-[0.28em] text-white/40">
-              Presence
+              {siteData.contactPage.presenceLabel}
             </div>
             <div className="mt-4 text-2xl font-medium">
-              {siteData.contact.city}
+              {siteData.contactPage.city}
             </div>
           </div>
         </div>
