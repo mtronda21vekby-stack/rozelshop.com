@@ -4,33 +4,21 @@ export default function CollectionsPage() {
   const siteData = getSiteContent('ru');
 
   return (
-    <section className="bg-black text-white">
-      <div className="mx-auto max-w-7xl px-6 py-20">
-        <div className="max-w-3xl">
-          <div className="text-xs uppercase tracking-[0.34em] text-white/42">
-            {siteData.collectionsPage.eyebrow}
-          </div>
-          <h1 className="mt-4 text-4xl font-medium md:text-6xl">
-            {siteData.collectionsPage.title}
-          </h1>
-          <p className="mt-6 text-base leading-7 text-white/62 md:text-lg">
-            {siteData.collectionsPage.description}
-          </p>
-        </div>
+    <section className="page-section">
+      <div className="container">
+        <div className="eyebrow">{siteData.collectionsPage.eyebrow}</div>
+        <h1 className="page-title">{siteData.collectionsPage.title}</h1>
+        <p className="page-text">{siteData.collectionsPage.description}</p>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div className="grid grid--3" style={{ marginTop: 34 }}>
           {siteData.collections.map((item) => (
-            <article
-              key={item.slug}
-              className="rounded-[2rem] border border-white/10 bg-white/[0.02] p-6"
-            >
-              <div className="text-xs uppercase tracking-[0.28em] text-white/40">
-                ROZEL
+            <article key={item.slug} className="card">
+              <div className="card__media" />
+              <div className="card__body">
+                <div className="card__label">ROZEL</div>
+                <h2 className="card__title">{item.title}</h2>
+                <p className="card__text">{item.description}</p>
               </div>
-              <h2 className="mt-5 text-2xl font-medium">{item.title}</h2>
-              <p className="mt-4 text-sm leading-7 text-white/62">
-                {item.description}
-              </p>
             </article>
           ))}
         </div>
