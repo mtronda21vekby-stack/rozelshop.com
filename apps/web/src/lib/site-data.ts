@@ -1,82 +1,406 @@
-export const siteData = {
-  brand: 'ROZEL',
-  domain: 'rozelshop.com',
-  navigation: [
-    { label: 'House', href: '/house' },
-    { label: 'Collections', href: '/collections' },
-    { label: 'Journal', href: '/journal' },
-    { label: 'Contact', href: '/contact' }
-  ],
+export type Locale = 'ru' | 'en';
+
+type NavItem = {
+  label: string;
+  href: string;
+};
+
+type HighlightItem = {
+  title: string;
+  text: string;
+};
+
+type CollectionItem = {
+  slug: string;
+  title: string;
+  description: string;
+};
+
+type JournalItem = {
+  title: string;
+  category: string;
+  excerpt: string;
+};
+
+type SiteContent = {
+  brand: string;
+  domain: string;
+  navigation: NavItem[];
   hero: {
-    eyebrow: 'Maison ROZEL',
-    title: 'A modern fashion house built on precision, silhouette, and restraint.',
-    description:
-      'ROZEL creates luxury ready-to-wear with a cinematic point of view, sharp tailoring, and quiet intensity.',
+    eyebrow: string;
+    title: string;
+    description: string;
     primaryCta: {
-      label: 'Explore Collections',
-      href: '/collections'
-    },
+      label: string;
+      href: string;
+    };
     secondaryCta: {
-      label: 'Enter the House',
-      href: '/house'
-    }
-  },
-  highlights: [
-    {
-      title: 'Editorial Direction',
-      text: 'A controlled visual language shaped by shadow, proportion, and movement.'
-    },
-    {
-      title: 'House Signatures',
-      text: 'Tailoring, evening forms, and private capsule pieces refined for modern luxury.'
-    },
-    {
-      title: 'Private Client Layer',
-      text: 'A future-ready foundation for drops, appointments, and premium account experiences.'
-    }
-  ],
-  collections: [
-    {
-      slug: 'noir-atelier',
-      title: 'Noir Atelier',
-      description: 'Structured outerwear, deep black tones, and sharp silhouette control.'
-    },
-    {
-      slug: 'private-capsule',
-      title: 'Private Capsule',
-      description: 'Limited editorial forms designed for release in tightly curated quantities.'
-    },
-    {
-      slug: 'evening-study',
-      title: 'Evening Study',
-      description: 'Fluid evening silhouettes defined by restraint, balance, and quiet power.'
-    }
-  ],
-  journal: [
-    {
-      title: 'The discipline of silhouette',
-      category: 'House Notes',
-      excerpt:
-        'ROZEL begins with shape: structure first, noise removed, emphasis placed on line and proportion.'
-    },
-    {
-      title: 'Dark tailoring as language',
-      category: 'Editorial',
-      excerpt:
-        'Black is treated as a material system — depth, contrast, and texture rather than absence.'
-    },
-    {
-      title: 'The private capsule model',
-      category: 'Collections',
-      excerpt:
-        'Limited release structures create a more intentional relationship between garment and client.'
-    }
-  ],
-  contact: {
-    email: 'clientservices@rozelshop.com',
-    city: 'Paris / Online'
-  },
+      label: string;
+      href: string;
+    };
+    sideTopLabel: string;
+    sideTopText: string;
+    sideBottomLabel: string;
+    sideBottomText: string;
+  };
+  home: {
+    introEyebrow: string;
+    introTitle: string;
+    collectionsEyebrow: string;
+    collectionsTitle: string;
+    viewAllLabel: string;
+  };
+  highlights: HighlightItem[];
+  collectionsPage: {
+    eyebrow: string;
+    title: string;
+    description: string;
+  };
+  collections: CollectionItem[];
+  housePage: {
+    eyebrow: string;
+    title: string;
+    paragraphs: string[];
+  };
+  journalPage: {
+    eyebrow: string;
+    title: string;
+  };
+  journal: JournalItem[];
+  contactPage: {
+    eyebrow: string;
+    title: string;
+    emailLabel: string;
+    presenceLabel: string;
+    email: string;
+    city: string;
+  };
+  privacyPage: {
+    eyebrow: string;
+    title: string;
+    text: string;
+  };
+  termsPage: {
+    eyebrow: string;
+    title: string;
+    text: string;
+  };
   footer: {
-    copyright: `© ${new Date().getFullYear()} ROZEL. All rights reserved.`
+    description: string;
+    navigationTitle: string;
+    servicesTitle: string;
+    copyright: string;
+  };
+};
+
+const content: Record<Locale, SiteContent> = {
+  ru: {
+    brand: 'ROZEL',
+    domain: 'rozelshop.com',
+    navigation: [
+      { label: 'Дом моды', href: '/house' },
+      { label: 'Коллекции', href: '/collections' },
+      { label: 'Журнал', href: '/journal' },
+      { label: 'Контакты', href: '/contact' }
+    ],
+    hero: {
+      eyebrow: 'Maison ROZEL',
+      title: 'Современный модный дом, построенный на точности, силуэте и сдержанности.',
+      description:
+        'ROZEL создаёт luxury ready-to-wear с кинематографичной подачей, точным кроем и тихой визуальной силой.',
+      primaryCta: {
+        label: 'Смотреть коллекции',
+        href: '/collections'
+      },
+      secondaryCta: {
+        label: 'Войти в дом',
+        href: '/house'
+      },
+      sideTopLabel: 'Направление дома',
+      sideTopText:
+        'Кинематографичный чёрный, скульптурный тейлоринг и дорогой, спокойный ритм luxury-опыта.',
+      sideBottomLabel: 'Фундамент',
+      sideBottomText:
+        'Сайт строится как premium storefront с местом для коллекций, product commerce, private client flows и скрытого admin-layer.'
+    },
+    home: {
+      introEyebrow: 'ROZEL',
+      introTitle: 'Дом, созданный для современной luxury-моды.',
+      collectionsEyebrow: 'Коллекции',
+      collectionsTitle: 'Фирменные миры ROZEL.',
+      viewAllLabel: 'Смотреть всё'
+    },
+    highlights: [
+      {
+        title: 'Редакционное направление',
+        text: 'Контролируемый визуальный язык, выстроенный через тень, пропорцию и движение.'
+      },
+      {
+        title: 'Коды дома',
+        text: 'Тейлоринг, вечерние формы и private capsule-подход, собранные в единую luxury-систему.'
+      },
+      {
+        title: 'Private client layer',
+        text: 'Фундамент под дропы, персональные сценарии и премиальный аккаунт-контур.'
+      }
+    ],
+    collectionsPage: {
+      eyebrow: 'Коллекции',
+      title: 'Вселенная коллекций ROZEL.',
+      description:
+        'Фирменный тейлоринг, private capsule-релизы и evening studies, собранные как отдельные editorial-миры.'
+    },
+    collections: [
+      {
+        slug: 'noir-atelier',
+        title: 'Noir Atelier',
+        description: 'Структурный outerwear, глубокий чёрный и жёсткий контроль силуэта.'
+      },
+      {
+        slug: 'private-capsule',
+        title: 'Private Capsule',
+        description: 'Ограниченные editorial-образы, рассчитанные на строго контролируемый выпуск.'
+      },
+      {
+        slug: 'evening-study',
+        title: 'Evening Study',
+        description: 'Текучие вечерние формы, построенные на сдержанности, балансе и тихой силе.'
+      }
+    ],
+    housePage: {
+      eyebrow: 'Дом моды',
+      title: 'ROZEL строится на точности, сдержанности и силуэте.',
+      paragraphs: [
+        'Дом формируется через тихий подход к luxury: меньше жестов, сильнее форма, чище пропорция и жёстче визуальная дисциплина.',
+        'ROZEL рассматривает тейлоринг, вечернюю конструкцию и editorial-подачу как единую систему. Вещь, кампания и клиентский опыт должны ощущаться согласованно.',
+        'Эта цифровая основа создаётся как полноценная fashion-платформа с коллекциями, private client-сценариями и скрытым административным слоем.'
+      ]
+    },
+    journalPage: {
+      eyebrow: 'Журнал',
+      title: 'Заметки из дома.'
+    },
+    journal: [
+      {
+        title: 'Дисциплина силуэта',
+        category: 'Дом',
+        excerpt:
+          'ROZEL начинается с формы: сначала структура, затем тишина, затем акцент на линии и пропорции.'
+      },
+      {
+        title: 'Тёмный тейлоринг как язык',
+        category: 'Editorial',
+        excerpt:
+          'Чёрный здесь — не отсутствие цвета, а система глубины, контраста и фактуры.'
+      },
+      {
+        title: 'Модель private capsule',
+        category: 'Коллекции',
+        excerpt:
+          'Ограниченный выпуск делает связь между вещью и клиентом более точной и осознанной.'
+      }
+    ],
+    contactPage: {
+      eyebrow: 'Контакты',
+      title: 'Клиентский сервис и контакты дома.',
+      emailLabel: 'Email',
+      presenceLabel: 'Присутствие',
+      email: 'clientservices@rozelshop.com',
+      city: 'Paris / Online'
+    },
+    privacyPage: {
+      eyebrow: 'Конфиденциальность',
+      title: 'Конфиденциальность',
+      text:
+        'ROZEL уважает приватность клиента и обрабатывает информацию с максимальной деликатностью. Полный текст политики будет расширен вместе с запуском commerce и account-слоя.'
+    },
+    termsPage: {
+      eyebrow: 'Условия',
+      title: 'Условия использования',
+      text:
+        'Условия использования цифрового дома ROZEL будут расширены вместе с запуском product commerce, клиентских аккаунтов и сервисных политик.'
+    },
+    footer: {
+      description:
+        'Luxury fashion house, сфокусированный на силуэте, editorial-ясности и сдержанном цифровом опыте.',
+      navigationTitle: 'Навигация',
+      servicesTitle: 'Клиентский сервис',
+      copyright: `© ${new Date().getFullYear()} ROZEL. Все права защищены.`
+    }
+  },
+  en: {
+    brand: 'ROZEL',
+    domain: 'rozelshop.com',
+    navigation: [
+      { label: 'House', href: '/house' },
+      { label: 'Collections', href: '/collections' },
+      { label: 'Journal', href: '/journal' },
+      { label: 'Contact', href: '/contact' }
+    ],
+    hero: {
+      eyebrow: 'Maison ROZEL',
+      title: 'A modern fashion house built on precision, silhouette, and restraint.',
+      description:
+        'ROZEL creates luxury ready-to-wear with a cinematic point of view, sharp tailoring, and quiet visual power.',
+      primaryCta: {
+        label: 'Explore Collections',
+        href: '/collections'
+      },
+      secondaryCta: {
+        label: 'Enter the House',
+        href: '/house'
+      },
+      sideTopLabel: 'House Direction',
+      sideTopText:
+        'Cinematic black, sculpted tailoring, and a premium luxury rhythm shaped with control.',
+      sideBottomLabel: 'Foundation',
+      sideBottomText:
+        'The site is built as a premium storefront first, with room for collections, product commerce, private client flows, and a hidden admin layer.'
+    },
+    home: {
+      introEyebrow: 'ROZEL',
+      introTitle: 'A house built for modern luxury.',
+      collectionsEyebrow: 'Collections',
+      collectionsTitle: 'Signature ROZEL worlds.',
+      viewAllLabel: 'View all'
+    },
+    highlights: [
+      {
+        title: 'Editorial Direction',
+        text: 'A controlled visual language shaped through shadow, proportion, and movement.'
+      },
+      {
+        title: 'House Signatures',
+        text: 'Tailoring, evening forms, and a private capsule model merged into one luxury system.'
+      },
+      {
+        title: 'Private Client Layer',
+        text: 'A future-ready base for drops, personal flows, and premium account experiences.'
+      }
+    ],
+    collectionsPage: {
+      eyebrow: 'Collections',
+      title: 'The ROZEL collection universe.',
+      description:
+        'Signature tailoring, private capsule releases, and evening studies designed as distinct editorial worlds.'
+    },
+    collections: [
+      {
+        slug: 'noir-atelier',
+        title: 'Noir Atelier',
+        description: 'Structured outerwear, deep black tones, and strict silhouette control.'
+      },
+      {
+        slug: 'private-capsule',
+        title: 'Private Capsule',
+        description: 'Limited editorial forms designed for tightly controlled release.'
+      },
+      {
+        slug: 'evening-study',
+        title: 'Evening Study',
+        description: 'Fluid evening silhouettes shaped by restraint, balance, and quiet power.'
+      }
+    ],
+    housePage: {
+      eyebrow: 'House',
+      title: 'ROZEL is built on precision, restraint, and silhouette.',
+      paragraphs: [
+        'The house is shaped by a quiet approach to luxury: fewer gestures, stronger forms, cleaner proportions, and stricter visual discipline.',
+        'ROZEL treats tailoring, evening structure, and editorial direction as one continuous system. The garment, the campaign, and the client experience are designed to feel aligned.',
+        'This digital foundation is being built as a complete fashion platform with collections, private client flows, and a hidden administrative layer.'
+      ]
+    },
+    journalPage: {
+      eyebrow: 'Journal',
+      title: 'Notes from the house.'
+    },
+    journal: [
+      {
+        title: 'The discipline of silhouette',
+        category: 'House',
+        excerpt:
+          'ROZEL begins with shape: structure first, then silence, then emphasis on line and proportion.'
+      },
+      {
+        title: 'Dark tailoring as language',
+        category: 'Editorial',
+        excerpt:
+          'Black is treated not as absence, but as a system of depth, contrast, and texture.'
+      },
+      {
+        title: 'The private capsule model',
+        category: 'Collections',
+        excerpt:
+          'Limited release structures create a more intentional relationship between garment and client.'
+      }
+    ],
+    contactPage: {
+      eyebrow: 'Contact',
+      title: 'Client services and house contact.',
+      emailLabel: 'Email',
+      presenceLabel: 'Presence',
+      email: 'clientservices@rozelshop.com',
+      city: 'Paris / Online'
+    },
+    privacyPage: {
+      eyebrow: 'Privacy',
+      title: 'Privacy',
+      text:
+        'ROZEL respects client privacy and handles information with discretion. The full policy will expand as the commerce and account layers are activated.'
+    },
+    termsPage: {
+      eyebrow: 'Terms',
+      title: 'Terms of Use',
+      text:
+        'Terms of use for the ROZEL digital house will expand alongside product commerce, client accounts, and service policies.'
+    },
+    footer: {
+      description:
+        'A luxury fashion house focused on silhouette, editorial clarity, and a restrained digital experience.',
+      navigationTitle: 'Navigation',
+      servicesTitle: 'Client Services',
+      copyright: `© ${new Date().getFullYear()} ROZEL. All rights reserved.`
+    }
   }
 };
+
+export function getSiteContent(locale: Locale): SiteContent {
+  return content[locale];
+}
+
+export function getLocaleFromPathname(pathname: string): Locale {
+  if (pathname === '/en' || pathname.startsWith('/en/')) {
+    return 'en';
+  }
+
+  return 'ru';
+}
+
+export function stripLocaleFromPathname(pathname: string): string {
+  if (!pathname || pathname === '/') {
+    return '/';
+  }
+
+  if (pathname === '/en') {
+    return '/';
+  }
+
+  if (pathname.startsWith('/en/')) {
+    const stripped = pathname.slice(3);
+    return stripped.length ? stripped : '/';
+  }
+
+  return pathname;
+}
+
+export function toLocalizedHref(locale: Locale, path: string): string {
+  if (locale === 'ru') {
+    return path;
+  }
+
+  if (path === '/') {
+    return '/en';
+  }
+
+  return `/en${path}`;
+}
