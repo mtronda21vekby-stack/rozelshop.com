@@ -9,6 +9,15 @@ import { SettingsModule } from './modules/settings/settings.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
-  imports: [HealthModule, AuthModule, UsersModule, CatalogModule, CollectionsModule, CmsModule, SettingsModule, AuditModule]
+  imports: [
+    HealthModule,
+    AuthModule,
+    UsersModule,
+    CatalogModule,
+    CollectionsModule,
+    CmsModule,
+    SettingsModule,
+    AuditModule,
+  ],
 })
 export class AppModule {}
