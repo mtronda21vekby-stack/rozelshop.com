@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  transpilePackages: ['@rozel/ui', '@rozel/types', '@rozel/utils']
+  output: 'export'
 };
 
 export default nextConfig;
