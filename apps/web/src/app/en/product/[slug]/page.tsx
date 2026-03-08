@@ -8,6 +8,14 @@ type ProductPageProps = {
   }>
 }
 
+export async function generateStaticParams() {
+  const siteData = getSiteContent('en')
+
+  return siteData.products.map((product) => ({
+    slug: product.slug
+  }))
+}
+
 export default async function EnglishProductPage({ params }: ProductPageProps) {
   const { slug } = await params
   const siteData = getSiteContent('en')
