@@ -18,22 +18,19 @@ export function SiteHeader({
   const siteData = getSiteContent(locale);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-black/85 text-white backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-5">
-        <Link
-          href={toLocalizedHref(locale, '/')}
-          className="text-lg font-semibold uppercase tracking-[0.38em]"
-        >
+    <header className="site-header">
+      <div className="container site-header__top">
+        <Link href={toLocalizedHref(locale, '/')} className="site-brand">
           {siteData.brand}
         </Link>
 
-        <div className="flex items-center gap-4 md:gap-8">
-          <nav className="hidden items-center gap-8 md:flex">
+        <div className="site-header__right">
+          <nav className="site-nav site-nav--desktop">
             {siteData.navigation.map((item) => (
               <Link
                 key={item.href}
                 href={toLocalizedHref(locale, item.href)}
-                className="text-sm uppercase tracking-[0.18em] text-white/72 transition hover:text-white"
+                className="site-nav__link"
               >
                 {item.label}
               </Link>
@@ -41,6 +38,22 @@ export function SiteHeader({
           </nav>
 
           <LanguageToggle locale={locale} currentPath={currentPath} />
+        </div>
+      </div>
+
+      <div className="site-header__mobile">
+        <div className="container">
+          <nav className="site-nav site-nav--mobile">
+            {siteData.navigation.map((item) => (
+              <Link
+                key={item.href}
+                href={toLocalizedHref(locale, item.href)}
+                className="site-nav__link"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </div>
     </header>
