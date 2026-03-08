@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { siteData } from '@/lib/site-data';
+import { siteData } from '../../lib/site-data';
 
 export function SiteHeader() {
   return (
@@ -7,7 +7,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
         <Link
           href="/"
-          className="text-lg font-semibold tracking-[0.35em] uppercase"
+          className="text-lg font-semibold uppercase tracking-[0.35em]"
         >
           {siteData.brand}
         </Link>
