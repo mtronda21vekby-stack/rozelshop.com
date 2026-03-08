@@ -1,25 +1,29 @@
-import { collections } from '@/lib/site-data';
+import { siteData } from '../../lib/site-data';
 
 export default function CollectionsPage() {
   return (
-    <main className="page-wrap">
-      <div className="shell">
-        <div className="page-intro">
-          <p className="eyebrow">Collections</p>
-          <h1 className="page-title">Seasonal architecture for drops, lookbooks, and merchandising.</h1>
-          <p className="copy">Collection entities are already reserved in the API and Prisma schema to support future merchandising workflows.</p>
+    <section className="bg-black text-white">
+      <div className="mx-auto max-w-7xl px-6 py-20">
+        <div className="mb-4 text-xs uppercase tracking-[0.35em] text-white/50">
+          ROZEL
         </div>
 
-        <div className="grid grid-2">
-          {collections.map((collection) => (
-            <article key={collection.id} className="card">
-              <p className="meta">{collection.season}</p>
-              <h2 className="card-title">{collection.title}</h2>
-              <p className="card-copy">{collection.description}</p>
+        <h1 className="text-4xl font-medium md:text-6xl">Collections</h1>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {siteData.collections.map((item) => (
+            <article
+              key={item.slug}
+              className="rounded-3xl border border-white/10 p-6"
+            >
+              <h2 className="text-2xl font-medium">{item.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-white/65">
+                {item.description}
+              </p>
             </article>
           ))}
         </div>
       </div>
-    </main>
+    </section>
   );
 }
