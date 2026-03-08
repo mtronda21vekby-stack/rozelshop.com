@@ -1,97 +1,126 @@
-export type Locale = 'ru' | 'en';
+export type Locale = 'ru' | 'en'
 
 type NavItem = {
-  label: string;
-  href: string;
-};
+  label: string
+  href: string
+}
 
 type HighlightItem = {
-  title: string;
-  text: string;
-};
+  title: string
+  text: string
+}
 
 type CollectionItem = {
-  slug: string;
-  title: string;
-  description: string;
-};
+  slug: string
+  title: string
+  description: string
+}
 
 type JournalItem = {
-  title: string;
-  category: string;
-  excerpt: string;
-};
+  title: string
+  category: string
+  excerpt: string
+}
+
+export type ProductItem = {
+  slug: string
+  collection: string
+  badge: string
+  title: string
+  subtitle: string
+  description: string
+  price: string
+  material: string
+  details: string[]
+}
 
 type SiteContent = {
-  brand: string;
-  domain: string;
-  navigation: NavItem[];
+  brand: string
+  domain: string
+  navigation: NavItem[]
   hero: {
-    eyebrow: string;
-    title: string;
-    description: string;
+    eyebrow: string
+    title: string
+    description: string
     primaryCta: {
-      label: string;
-      href: string;
-    };
+      label: string
+      href: string
+    }
     secondaryCta: {
-      label: string;
-      href: string;
-    };
-    sideTopLabel: string;
-    sideTopText: string;
-    sideBottomLabel: string;
-    sideBottomText: string;
-  };
+      label: string
+      href: string
+    }
+    sideTopLabel: string
+    sideTopText: string
+    sideBottomLabel: string
+    sideBottomText: string
+  }
   home: {
-    introEyebrow: string;
-    introTitle: string;
-    collectionsEyebrow: string;
-    collectionsTitle: string;
-    viewAllLabel: string;
-  };
-  highlights: HighlightItem[];
+    introEyebrow: string
+    introTitle: string
+    collectionsEyebrow: string
+    collectionsTitle: string
+    viewAllLabel: string
+    productsEyebrow: string
+    productsTitle: string
+    productsLinkLabel: string
+  }
+  highlights: HighlightItem[]
   collectionsPage: {
-    eyebrow: string;
-    title: string;
-    description: string;
-  };
-  collections: CollectionItem[];
+    eyebrow: string
+    title: string
+    description: string
+  }
+  collections: CollectionItem[]
+  productsPage: {
+    eyebrow: string
+    title: string
+    description: string
+  }
+  products: ProductItem[]
+  productPage: {
+    backLabel: string
+    detailsTitle: string
+    materialLabel: string
+    collectionLabel: string
+    ctaPrimary: string
+    ctaSecondary: string
+  }
   housePage: {
-    eyebrow: string;
-    title: string;
-    paragraphs: string[];
-  };
+    eyebrow: string
+    title: string
+    paragraphs: string[]
+  }
   journalPage: {
-    eyebrow: string;
-    title: string;
-  };
-  journal: JournalItem[];
+    eyebrow: string
+    title: string
+  }
+  journal: JournalItem[]
   contactPage: {
-    eyebrow: string;
-    title: string;
-    emailLabel: string;
-    presenceLabel: string;
-    email: string;
-    city: string;
-  };
+    eyebrow: string
+    title: string
+    emailLabel: string
+    presenceLabel: string
+    email: string
+    city: string
+  }
   privacyPage: {
-    eyebrow: string;
-    title: string;
-    text: string;
-  };
+    eyebrow: string
+    title: string
+    text: string
+  }
   termsPage: {
-    eyebrow: string;
-    title: string;
-    text: string;
-  };
+    eyebrow: string
+    title: string
+    text: string
+  }
   footer: {
-    description: string;
-    navigationTitle: string;
-    servicesTitle: string;
-    copyright: string;
-  };
-};
+    description: string
+    navigationTitle: string
+    servicesTitle: string
+    copyright: string
+  }
+}
 
 const content: Record<Locale, SiteContent> = {
   ru: {
@@ -128,7 +157,10 @@ const content: Record<Locale, SiteContent> = {
       introTitle: 'Дом, созданный для современной luxury-моды.',
       collectionsEyebrow: 'Коллекции',
       collectionsTitle: 'Фирменные миры ROZEL.',
-      viewAllLabel: 'Смотреть всё'
+      viewAllLabel: 'Смотреть всё',
+      productsEyebrow: 'Изделия',
+      productsTitle: 'Первый product layer дома.',
+      productsLinkLabel: 'Открыть каталог'
     },
     highlights: [
       {
@@ -167,6 +199,73 @@ const content: Record<Locale, SiteContent> = {
         description: 'Текучие вечерние формы, построенные на сдержанности, балансе и тихой силе.'
       }
     ],
+    productsPage: {
+      eyebrow: 'Каталог',
+      title: 'Коллекционные изделия ROZEL.',
+      description:
+        'Первый product layer дома: верхняя одежда, вечерние формы и точный тейлоринг, оформленные как luxury storefront.'
+    },
+    products: [
+      {
+        slug: 'noir-tailored-coat',
+        collection: 'Noir Atelier',
+        badge: 'Signature',
+        title: 'Noir Tailored Coat',
+        subtitle: 'Структурное пальто с жёсткой линией плеч',
+        description:
+          'Силуэтное пальто с длинной линией, плотной посадкой по корпусу и controlled editorial-подачей.',
+        price: '$2,400',
+        material: 'Wool / Cashmere Blend',
+        details: [
+          'Удлинённый силуэт',
+          'Жёсткая линия плеч',
+          'Скрытая застёжка',
+          'Подкладка premium-grade'
+        ]
+      },
+      {
+        slug: 'atelier-silk-dress',
+        collection: 'Evening Study',
+        badge: 'Evening',
+        title: 'Atelier Silk Dress',
+        subtitle: 'Текучая вечерняя форма',
+        description:
+          'Вечернее изделие с мягким падением ткани, чистой вертикалью и приглушённым luxury-характером.',
+        price: '$1,800',
+        material: 'Silk Satin',
+        details: [
+          'Мягкая вертикальная линия',
+          'Минималистичный крой',
+          'Evening-oriented silhouette',
+          'Лёгкая внутренняя структура'
+        ]
+      },
+      {
+        slug: 'private-capsule-jacket',
+        collection: 'Private Capsule',
+        badge: 'Limited',
+        title: 'Private Capsule Jacket',
+        subtitle: 'Ограниченный жакет editorial-линии',
+        description:
+          'Короткий жакет с точным объёмом, строгой архитектурой корпуса и капсульным характером.',
+        price: '$1,950',
+        material: 'Structured Wool',
+        details: [
+          'Капсульный выпуск',
+          'Архитектурная форма',
+          'Чистая передняя плоскость',
+          'Плотная luxury-фактура'
+        ]
+      }
+    ],
+    productPage: {
+      backLabel: 'Назад в каталог',
+      detailsTitle: 'Детали изделия',
+      materialLabel: 'Материал',
+      collectionLabel: 'Коллекция',
+      ctaPrimary: 'Связаться по изделию',
+      ctaSecondary: 'Открыть коллекции'
+    },
     housePage: {
       eyebrow: 'Дом моды',
       title: 'ROZEL строится на точности, сдержанности и силуэте.',
@@ -262,7 +361,10 @@ const content: Record<Locale, SiteContent> = {
       introTitle: 'A house built for modern luxury.',
       collectionsEyebrow: 'Collections',
       collectionsTitle: 'Signature ROZEL worlds.',
-      viewAllLabel: 'View all'
+      viewAllLabel: 'View all',
+      productsEyebrow: 'Products',
+      productsTitle: 'The first product layer of the house.',
+      productsLinkLabel: 'Open catalog'
     },
     highlights: [
       {
@@ -301,6 +403,73 @@ const content: Record<Locale, SiteContent> = {
         description: 'Fluid evening silhouettes shaped by restraint, balance, and quiet power.'
       }
     ],
+    productsPage: {
+      eyebrow: 'Catalog',
+      title: 'ROZEL collection products.',
+      description:
+        'The first product layer of the house: outerwear, evening forms, and precise tailoring framed as a luxury storefront.'
+    },
+    products: [
+      {
+        slug: 'noir-tailored-coat',
+        collection: 'Noir Atelier',
+        badge: 'Signature',
+        title: 'Noir Tailored Coat',
+        subtitle: 'Structured coat with a sharp shoulder line',
+        description:
+          'A silhouette coat with a long line, controlled fit through the body, and strong editorial presence.',
+        price: '$2,400',
+        material: 'Wool / Cashmere Blend',
+        details: [
+          'Extended silhouette',
+          'Sharp shoulder line',
+          'Hidden closure',
+          'Premium-grade lining'
+        ]
+      },
+      {
+        slug: 'atelier-silk-dress',
+        collection: 'Evening Study',
+        badge: 'Evening',
+        title: 'Atelier Silk Dress',
+        subtitle: 'Fluid evening form',
+        description:
+          'An evening piece with soft fabric fall, clean verticality, and a restrained luxury character.',
+        price: '$1,800',
+        material: 'Silk Satin',
+        details: [
+          'Soft vertical line',
+          'Minimal cut',
+          'Evening-oriented silhouette',
+          'Light internal structure'
+        ]
+      },
+      {
+        slug: 'private-capsule-jacket',
+        collection: 'Private Capsule',
+        badge: 'Limited',
+        title: 'Private Capsule Jacket',
+        subtitle: 'Limited jacket from the editorial line',
+        description:
+          'A short jacket with precise volume, strict body architecture, and a capsule luxury identity.',
+        price: '$1,950',
+        material: 'Structured Wool',
+        details: [
+          'Capsule release',
+          'Architectural shape',
+          'Clean front plane',
+          'Dense luxury texture'
+        ]
+      }
+    ],
+    productPage: {
+      backLabel: 'Back to catalog',
+      detailsTitle: 'Product details',
+      materialLabel: 'Material',
+      collectionLabel: 'Collection',
+      ctaPrimary: 'Contact about this item',
+      ctaSecondary: 'Open collections'
+    },
     housePage: {
       eyebrow: 'House',
       title: 'ROZEL is built on precision, restraint, and silhouette.',
@@ -362,45 +531,49 @@ const content: Record<Locale, SiteContent> = {
       copyright: `© ${new Date().getFullYear()} ROZEL. All rights reserved.`
     }
   }
-};
+}
 
 export function getSiteContent(locale: Locale): SiteContent {
-  return content[locale];
+  return content[locale]
 }
 
 export function getLocaleFromPathname(pathname: string): Locale {
   if (pathname === '/en' || pathname.startsWith('/en/')) {
-    return 'en';
+    return 'en'
   }
 
-  return 'ru';
+  return 'ru'
 }
 
 export function stripLocaleFromPathname(pathname: string): string {
   if (!pathname || pathname === '/') {
-    return '/';
+    return '/'
   }
 
   if (pathname === '/en') {
-    return '/';
+    return '/'
   }
 
   if (pathname.startsWith('/en/')) {
-    const stripped = pathname.slice(3);
-    return stripped.length ? stripped : '/';
+    const stripped = pathname.slice(3)
+    return stripped.length ? stripped : '/'
   }
 
-  return pathname;
+  return pathname
 }
 
 export function toLocalizedHref(locale: Locale, path: string): string {
   if (locale === 'ru') {
-    return path;
+    return path
   }
 
   if (path === '/') {
-    return '/en';
+    return '/en'
   }
 
-  return `/en${path}`;
+  return `/en${path}`
+}
+
+export function getProductBySlug(locale: Locale, slug: string): ProductItem | undefined {
+  return content[locale].products.find((item) => item.slug === slug)
 }
