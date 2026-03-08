@@ -1,18 +1,24 @@
 import Link from 'next/link';
-import { Wordmark } from '@rozel/ui';
-import { navItems } from '@/lib/site-data';
+import { siteData } from '@/lib/site-data';
 
 export function SiteHeader() {
   return (
-    <header className="site-header">
-      <div className="shell header-inner">
-        <Link href="/" className="brand" aria-label="ROZEL home">
-          <Wordmark />
+    <header className="border-b border-white/10 bg-black text-white">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
+        <Link
+          href="/"
+          className="text-lg font-semibold tracking-[0.35em] uppercase"
+        >
+          {siteData.brand}
         </Link>
 
-        <nav className="nav" aria-label="Primary navigation">
-          {navItems.map((item) => (
-            <Link key={item.href} href={item.href} className="nav-link">
+        <nav className="hidden gap-6 md:flex">
+          {siteData.navigation.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="text-sm text-white/80 transition hover:text-white"
+            >
               {item.label}
             </Link>
           ))}
