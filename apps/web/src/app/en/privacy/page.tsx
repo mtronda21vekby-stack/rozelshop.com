@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { getSiteContent } from '../../lib/site-data'
+import { getSiteContent } from '../../../lib/site-data'
 
-export default function PrivacyPage() {
-  const siteData = getSiteContent('ru')
+export default function EnglishPrivacyPage() {
+  const siteData = getSiteContent('en')
 
   return (
     <>
@@ -39,22 +39,22 @@ export default function PrivacyPage() {
                 </div>
 
                 <h2 className="cta-band__title">
-                  Приватность — часть luxury-опыта.
+                  Privacy is part of the luxury experience.
                 </h2>
 
                 <p className="cta-band__text">
-                  По мере запуска commerce-layer,
-                  аккаунтов и клиентских сценариев
-                  политика конфиденциальности будет
-                  расширена до полноценного production-уровня.
+                  As the commerce layer, accounts,
+                  and client scenarios go live,
+                  the privacy policy will expand
+                  to full production level.
                 </p>
               </div>
 
               <Link
-                href="/contact"
+                href="/en/contact"
                 className="btn btn--primary"
               >
-                Связаться
+                Contact
               </Link>
 
             </div>
