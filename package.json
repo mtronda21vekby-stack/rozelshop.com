@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "turbo run dev --parallel",
     "build": "turbo run build",
+    "build:web": "pnpm --filter @rozel/web build",
+    "build:admin": "pnpm --filter @rozel/admin build",
+    "build:api": "pnpm --filter @rozel/api build",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
     "format": "turbo run format"
