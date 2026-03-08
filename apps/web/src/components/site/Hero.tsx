@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { siteData } from '@/lib/site-data';
+import { siteData } from '../../lib/site-data';
 
 export function Hero() {
   return (
