@@ -4,29 +4,17 @@ export default function EnglishJournalPage() {
   const siteData = getSiteContent('en');
 
   return (
-    <section className="bg-black text-white">
-      <div className="mx-auto max-w-6xl px-6 py-20">
-        <div className="text-xs uppercase tracking-[0.34em] text-white/42">
-          {siteData.journalPage.eyebrow}
-        </div>
+    <section className="page-section">
+      <div className="container">
+        <div className="eyebrow">{siteData.journalPage.eyebrow}</div>
+        <h1 className="page-title">{siteData.journalPage.title}</h1>
 
-        <h1 className="mt-4 text-4xl font-medium md:text-6xl">
-          {siteData.journalPage.title}
-        </h1>
-
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div className="grid grid--3" style={{ marginTop: 34 }}>
           {siteData.journal.map((item) => (
-            <article
-              key={item.title}
-              className="rounded-[2rem] border border-white/10 bg-white/[0.02] p-6"
-            >
-              <div className="text-xs uppercase tracking-[0.28em] text-white/40">
-                {item.category}
-              </div>
-              <h2 className="mt-5 text-2xl font-medium">{item.title}</h2>
-              <p className="mt-4 text-sm leading-7 text-white/62">
-                {item.excerpt}
-              </p>
+            <article key={item.title} className="card feature-card">
+              <div className="card__label">{item.category}</div>
+              <h2 className="journal-card__title">{item.title}</h2>
+              <p className="feature-card__text">{item.excerpt}</p>
             </article>
           ))}
         </div>
