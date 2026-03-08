@@ -3,6 +3,7 @@ import { getSiteContent } from '../../lib/site-data'
 
 export default function CollectionsPage() {
   const siteData = getSiteContent('ru')
+  const featured = siteData.products[0]
 
   return (
     <>
@@ -12,10 +13,17 @@ export default function CollectionsPage() {
           <h1 className="page-title">{siteData.productsPage.title}</h1>
           <p className="page-text">{siteData.productsPage.description}</p>
 
+          <div className="catalog-tabs">
+            <div className="catalog-tab is-active">{siteData.productsPage.tabs.all}</div>
+            <div className="catalog-tab">{siteData.productsPage.tabs.outerwear}</div>
+            <div className="catalog-tab">{siteData.productsPage.tabs.evening}</div>
+            <div className="catalog-tab">{siteData.productsPage.tabs.capsule}</div>
+          </div>
+
           <div className="grid grid--3" style={{ marginTop: 34 }}>
             {siteData.products.map((item) => (
               <article key={item.slug} className="card">
-                <div className="card__media" />
+                <div className="card__media card__media--soft" />
 
                 <div className="card__body">
                   <div className="card__label">{item.badge}</div>
@@ -38,48 +46,21 @@ export default function CollectionsPage() {
 
       <section className="page-section page-divider">
         <div className="container">
-          <div className="section-head">
-            <div className="eyebrow">ROZEL</div>
-            <h2 className="section-title">Редакционная структура коллекций</h2>
-          </div>
+          <div className="featured-product">
+            <div className="featured-product__media" />
 
-          <div className="editorial-grid">
-            <article className="editorial-card editorial-card--tall">
-              <div className="editorial-card__overlay" />
+            <div>
+              <div className="eyebrow">Featured</div>
+              <h2 className="featured-product__title">{featured.title}</h2>
+              <p className="featured-product__text">{siteData.productsPage.featuredText}</p>
 
-              <div className="editorial-card__content">
-                <div className="editorial-card__eyebrow">SIGNATURE</div>
-                <h3 className="editorial-card__title">Noir Atelier</h3>
-                <p className="editorial-card__text">
-                  Основная линия чёрного тейлоринга, выстроенная через жёсткую форму,
-                  структуру плеча и тишину материала.
-                </p>
+              <div className="featured-product__meta">
+                <div className="card__price">{featured.price}</div>
+                <Link href={`/product/${featured.slug}`} className="btn btn--primary">
+                  Открыть изделие
+                </Link>
               </div>
-            </article>
-
-            <article className="editorial-card editorial-card--soft">
-              <div className="editorial-card__overlay" />
-
-              <div className="editorial-card__content">
-                <div className="editorial-card__eyebrow">CAPSULE</div>
-                <h3 className="editorial-card__title">Private Capsule</h3>
-                <p className="editorial-card__text">
-                  Ограниченные editorial-релизы для контролируемого luxury-объёма.
-                </p>
-              </div>
-            </article>
-
-            <article className="editorial-card editorial-card--soft">
-              <div className="editorial-card__overlay" />
-
-              <div className="editorial-card__content">
-                <div className="editorial-card__eyebrow">EVENING</div>
-                <h3 className="editorial-card__title">Evening Study</h3>
-                <p className="editorial-card__text">
-                  Вечерние формы с плавной пластикой, балансом и тихой визуальной силой.
-                </p>
-              </div>
-            </article>
+            </div>
           </div>
         </div>
       </section>
