@@ -15,7 +15,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ru">
-      <body className="bg-black text-white antialiased">
+      <body>
         <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
