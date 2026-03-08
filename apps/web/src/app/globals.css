@@ -939,3 +939,41 @@ img {
     padding-bottom: 82px;
   }
 }
+.admin-login {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 40px;
+  border-radius: 30px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.admin-login__form {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-input {
+  height: 50px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.04);
+  color: white;
+}
+
+.admin-dashboard {
+  margin-top: 40px;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+}
+
+.admin-card {
+  padding: 24px;
+  border-radius: 22px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
