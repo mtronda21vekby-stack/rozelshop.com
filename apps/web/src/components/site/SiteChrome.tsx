@@ -18,10 +18,10 @@ export function SiteChrome({ children }: SiteChromeProps) {
   const currentPath = stripLocaleFromPathname(pathname);
 
   return (
-    <>
+    <div className="site-shell">
       <SiteHeader locale={locale} currentPath={currentPath} />
       <main>{children}</main>
       <SiteFooter locale={locale} />
-    </>
+    </div>
   );
 }
