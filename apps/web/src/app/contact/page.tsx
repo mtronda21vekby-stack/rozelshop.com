@@ -1,19 +1,37 @@
+import { siteData } from '../../lib/site-data';
+
 export default function ContactPage() {
   return (
-    <main className="page-wrap">
-      <div className="shell">
-        <div className="page-intro">
-          <p className="eyebrow">Client Services</p>
-          <h1 className="page-title">Support, concierge, appointments, and premium service layer start here.</h1>
-          <p className="copy">The final implementation can attach email flows, CRM handoff, appointment logic, and protected client-service channels.</p>
+    <section className="bg-black text-white">
+      <div className="mx-auto max-w-5xl px-6 py-20">
+        <div className="text-xs uppercase tracking-[0.34em] text-white/42">
+          Contact
         </div>
 
-        <div className="card">
-          <p className="meta">Contact</p>
-          <h2 className="card-title">service@rozelshop.com</h2>
-          <p className="card-copy">Placeholder service address for the GitHub foundation.</p>
+        <h1 className="mt-4 text-4xl font-medium md:text-6xl">
+          Client services and house contact.
+        </h1>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.02] p-6">
+            <div className="text-xs uppercase tracking-[0.28em] text-white/40">
+              Email
+            </div>
+            <div className="mt-4 text-2xl font-medium">
+              {siteData.contact.email}
+            </div>
+          </div>
+
+          <div className="rounded-[2rem] border border-white/10 bg-white/[0.02] p-6">
+            <div className="text-xs uppercase tracking-[0.28em] text-white/40">
+              Presence
+            </div>
+            <div className="mt-4 text-2xl font-medium">
+              {siteData.contact.city}
+            </div>
+          </div>
         </div>
       </div>
-    </main>
+    </section>
   );
 }
