@@ -1,19 +1,20 @@
-import { siteData } from '../../lib/site-data';
+import { getSiteContent } from '../../lib/site-data';
 
 export default function CollectionsPage() {
+  const siteData = getSiteContent('ru');
+
   return (
     <section className="bg-black text-white">
       <div className="mx-auto max-w-7xl px-6 py-20">
         <div className="max-w-3xl">
           <div className="text-xs uppercase tracking-[0.34em] text-white/42">
-            Collections
+            {siteData.collectionsPage.eyebrow}
           </div>
           <h1 className="mt-4 text-4xl font-medium md:text-6xl">
-            The ROZEL collection universe.
+            {siteData.collectionsPage.title}
           </h1>
           <p className="mt-6 text-base leading-7 text-white/62 md:text-lg">
-            Signature tailoring, private capsule releases, and evening studies
-            designed as distinct editorial worlds.
+            {siteData.collectionsPage.description}
           </p>
         </div>
 
