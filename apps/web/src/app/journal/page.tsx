@@ -1,15 +1,17 @@
-import { siteData } from '../../lib/site-data';
+import { getSiteContent } from '../../lib/site-data';
 
 export default function JournalPage() {
+  const siteData = getSiteContent('ru');
+
   return (
     <section className="bg-black text-white">
       <div className="mx-auto max-w-6xl px-6 py-20">
         <div className="text-xs uppercase tracking-[0.34em] text-white/42">
-          Journal
+          {siteData.journalPage.eyebrow}
         </div>
 
         <h1 className="mt-4 text-4xl font-medium md:text-6xl">
-          Notes from the house.
+          {siteData.journalPage.title}
         </h1>
 
         <div className="mt-14 grid gap-6 md:grid-cols-3">
