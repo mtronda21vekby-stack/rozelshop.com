@@ -1,9 +1,12 @@
 import Link from 'next/link'
 import { Hero } from '../components/site/Hero'
 import { getSiteContent } from '../lib/site-data'
+import { defaultCmsSnapshot } from '../lib/cms-store'
 
 export default function HomePage() {
   const siteData = getSiteContent('ru')
+  const featured = siteData.products[0]
+  const home = defaultCmsSnapshot.home
 
   return (
     <>
@@ -12,8 +15,8 @@ export default function HomePage() {
       <section className="page-section">
         <div className="container">
           <div className="section-head">
-            <div className="eyebrow">{siteData.home.introEyebrow}</div>
-            <h2 className="section-title">{siteData.home.introTitle}</h2>
+            <div className="eyebrow">{home.introEyebrow}</div>
+            <h2 className="section-title">{home.introTitle}</h2>
           </div>
 
           <div className="grid grid--3">
@@ -60,19 +63,19 @@ export default function HomePage() {
         <div className="container">
           <div className="section-head__row">
             <div>
-              <div className="eyebrow">{siteData.home.productsEyebrow}</div>
-              <h2 className="section-title">{siteData.home.productsTitle}</h2>
+              <div className="eyebrow">{home.productsEyebrow}</div>
+              <h2 className="section-title">{home.productsTitle}</h2>
             </div>
 
             <Link href="/collections" className="link-inline">
-              {siteData.home.productsLinkLabel}
+              {home.productsLinkLabel}
             </Link>
           </div>
 
           <div className="grid grid--3" style={{ marginTop: 34 }}>
             {siteData.products.map((item) => (
               <article key={item.slug} className="card">
-                <div className="card__media" />
+                <div className="card__media card__media--soft" />
 
                 <div className="card__body">
                   <div className="card__label">{item.badge}</div>
@@ -89,6 +92,27 @@ export default function HomePage() {
                 </div>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section page-divider">
+        <div className="container">
+          <div className="featured-product">
+            <div className="featured-product__media" />
+
+            <div>
+              <div className="eyebrow">{home.featuredEyebrow}</div>
+              <h2 className="featured-product__title">{home.featuredTitle}</h2>
+              <p className="featured-product__text">{home.featuredText}</p>
+
+              <div className="featured-product__meta">
+                <div className="card__price">{featured.price}</div>
+                <Link href={`/product/${featured.slug}`} className="btn btn--primary">
+                  {home.featuredCta}
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
