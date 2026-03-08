@@ -13,28 +13,21 @@ export function SiteFooter({ locale }: SiteFooterProps) {
   const siteData = getSiteContent(locale);
 
   return (
-    <footer className="border-t border-white/10 bg-black text-white">
-      <div className="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-3">
+    <footer className="footer">
+      <div className="container footer__grid">
         <div>
-          <div className="text-sm uppercase tracking-[0.34em] text-white/72">
-            {siteData.brand}
-          </div>
-          <p className="mt-4 max-w-sm text-sm leading-6 text-white/55">
-            {siteData.footer.description}
-          </p>
+          <div className="footer__brand">{siteData.brand}</div>
+          <p className="footer__text">{siteData.footer.description}</p>
         </div>
 
         <div>
-          <div className="text-xs uppercase tracking-[0.28em] text-white/42">
-            {siteData.footer.navigationTitle}
-          </div>
-
-          <div className="mt-4 flex flex-col gap-3">
+          <div className="footer__title">{siteData.footer.navigationTitle}</div>
+          <div className="footer__links">
             {siteData.navigation.map((item) => (
               <Link
                 key={item.href}
                 href={toLocalizedHref(locale, item.href)}
-                className="text-sm text-white/70 transition hover:text-white"
+                className="footer__link"
               >
                 {item.label}
               </Link>
@@ -43,28 +36,25 @@ export function SiteFooter({ locale }: SiteFooterProps) {
         </div>
 
         <div>
-          <div className="text-xs uppercase tracking-[0.28em] text-white/42">
-            {siteData.footer.servicesTitle}
-          </div>
-
-          <div className="mt-4 flex flex-col gap-3 text-sm text-white/70">
+          <div className="footer__title">{siteData.footer.servicesTitle}</div>
+          <div className="footer__links">
             <Link
               href={toLocalizedHref(locale, '/contact')}
-              className="transition hover:text-white"
+              className="footer__link"
             >
               {locale === 'ru' ? 'Контакты' : 'Contact'}
             </Link>
 
             <Link
               href={toLocalizedHref(locale, '/privacy')}
-              className="transition hover:text-white"
+              className="footer__link"
             >
               {locale === 'ru' ? 'Конфиденциальность' : 'Privacy'}
             </Link>
 
             <Link
               href={toLocalizedHref(locale, '/terms')}
-              className="transition hover:text-white"
+              className="footer__link"
             >
               {locale === 'ru' ? 'Условия' : 'Terms'}
             </Link>
@@ -72,7 +62,7 @@ export function SiteFooter({ locale }: SiteFooterProps) {
         </div>
       </div>
 
-      <div className="border-t border-white/10 px-6 py-5 text-center text-xs tracking-[0.18em] text-white/45">
+      <div className="container footer__bottom">
         {siteData.footer.copyright}
       </div>
     </footer>
