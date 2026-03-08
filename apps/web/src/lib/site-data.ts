@@ -1,31 +1,44 @@
-import type { CollectionSummary, NavItem, ProductSummary } from '@rozel/types';
-
-export const navItems: NavItem[] = [
-  { href: '/house', label: 'House' },
-  { href: '/collections', label: 'Collections' },
-  { href: '/journal', label: 'Journal' },
-  { href: '/contact', label: 'Client Services' }
-];
-
-export const featuredProducts: ProductSummary[] = [
-  { id: '1', slug: 'sculpted-coat', name: 'Sculpted Coat', price: 3200, currency: 'USD', badge: 'New' },
-  { id: '2', slug: 'silk-column-dress', name: 'Silk Column Dress', price: 2600, currency: 'USD' },
-  { id: '3', slug: 'atelier-trouser', name: 'Atelier Trouser', price: 980, currency: 'USD' }
-];
-
-export const collections: CollectionSummary[] = [
-  {
-    id: '1',
-    slug: 'noir-volume',
-    title: 'Noir Volume',
-    season: 'Autumn / Winter',
-    description: 'Architectural silhouettes, dense tailoring, and sharp evening rhythm.'
+export const siteData = {
+  brand: 'ROZEL',
+  domain: 'rozelshop.com',
+  navigation: [
+    { label: 'Home', href: '/' },
+    { label: 'Collections', href: '/collections' },
+    { label: 'About', href: '/about' },
+    { label: 'Contact', href: '/contact' }
+  ],
+  hero: {
+    eyebrow: 'Maison ROZEL',
+    title: 'A modern fashion house shaped by silhouette, precision, and restraint.',
+    description:
+      'Luxury ready-to-wear, editorial collections, and a quiet digital experience built for the house of ROZEL.',
+    primaryCta: {
+      label: 'Explore Collections',
+      href: '/collections'
+    },
+    secondaryCta: {
+      label: 'Enter the House',
+      href: '/about'
+    }
   },
-  {
-    id: '2',
-    slug: 'bone-light',
-    title: 'Bone Light',
-    season: 'Resort',
-    description: 'Pale structure, soft drape, and restrained ceremony.'
+  collections: [
+    {
+      slug: 'noir-atelier',
+      title: 'Noir Atelier',
+      description: 'Sharp tailoring, deep black tones, and sculpted outerwear.'
+    },
+    {
+      slug: 'private-capsule',
+      title: 'Private Capsule',
+      description: 'Limited silhouettes designed for editorial presentation.'
+    },
+    {
+      slug: 'evening-study',
+      title: 'Evening Study',
+      description: 'Fluid forms, precise lines, and quiet luxury for nightwear.'
+    }
+  ],
+  footer: {
+    copyright: `© ${new Date().getFullYear()} ROZEL. All rights reserved.`
   }
-];
+};
