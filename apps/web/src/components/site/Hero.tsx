@@ -1,10 +1,13 @@
+'use client'
+
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import {
   Locale,
   getSiteContent,
   toLocalizedHref
 } from '../../lib/site-data'
-import { defaultCmsSnapshot } from '../../lib/cms-store'
+import { defaultCmsSnapshot, readCmsSnapshot } from '../../lib/cms-store'
 
 type HeroProps = {
   locale: Locale
@@ -12,10 +15,19 @@ type HeroProps = {
 
 export function Hero({ locale }: HeroProps) {
   const siteData = getSiteContent(locale)
+  const [cmsHero, setCmsHero] = useState(defaultCmsSnapshot.hero)
+
+  useEffect(() => {
+    if (locale !== 'ru') {
+      return
+    }
+
+    setCmsHero(readCmsSnapshot().hero)
+  }, [locale])
 
   const hero =
     locale === 'ru'
-      ? defaultCmsSnapshot.hero
+      ? cmsHero
       : {
           eyebrow: siteData.hero.eyebrow,
           title: siteData.hero.title,
