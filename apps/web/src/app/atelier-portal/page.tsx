@@ -23,21 +23,21 @@ type AdminProduct = {
   title: string
   collection: string
   price: string
-  status: 'Draft' | 'Published'
+  status: 'Черновик' | 'Опубликовано'
 }
 
 type AdminCollection = {
   id: string
   title: string
   type: string
-  status: 'Draft' | 'Published'
+  status: 'Черновик' | 'Опубликовано'
 }
 
 type AdminJournal = {
   id: string
   title: string
   category: string
-  status: 'Draft' | 'Published'
+  status: 'Черновик' | 'Опубликовано'
 }
 
 const initialProducts: AdminProduct[] = [
@@ -46,21 +46,21 @@ const initialProducts: AdminProduct[] = [
     title: 'Noir Tailored Coat',
     collection: 'Noir Atelier',
     price: '$2,400',
-    status: 'Published'
+    status: 'Опубликовано'
   },
   {
     id: 'prd-002',
     title: 'Atelier Silk Dress',
     collection: 'Evening Study',
     price: '$1,800',
-    status: 'Draft'
+    status: 'Черновик'
   },
   {
     id: 'prd-003',
     title: 'Private Capsule Jacket',
     collection: 'Private Capsule',
     price: '$1,950',
-    status: 'Published'
+    status: 'Опубликовано'
   }
 ]
 
@@ -69,19 +69,19 @@ const initialCollections: AdminCollection[] = [
     id: 'col-001',
     title: 'Noir Atelier',
     type: 'Outerwear',
-    status: 'Published'
+    status: 'Опубликовано'
   },
   {
     id: 'col-002',
     title: 'Private Capsule',
     type: 'Capsule',
-    status: 'Published'
+    status: 'Опубликовано'
   },
   {
     id: 'col-003',
     title: 'Evening Study',
     type: 'Evening',
-    status: 'Draft'
+    status: 'Черновик'
   }
 ]
 
@@ -89,20 +89,20 @@ const initialJournal: AdminJournal[] = [
   {
     id: 'jrn-001',
     title: 'The discipline of silhouette',
-    category: 'House',
-    status: 'Published'
+    category: 'Дом',
+    status: 'Опубликовано'
   },
   {
     id: 'jrn-002',
     title: 'Dark tailoring as language',
     category: 'Editorial',
-    status: 'Draft'
+    status: 'Черновик'
   },
   {
     id: 'jrn-003',
     title: 'The private capsule model',
-    category: 'Collections',
-    status: 'Published'
+    category: 'Коллекции',
+    status: 'Опубликовано'
   }
 ]
 
@@ -114,12 +114,12 @@ function AdminSidebar({
   onChange: (section: AdminSection) => void
 }) {
   const items: { key: AdminSection; label: string }[] = [
-    { key: 'dashboard', label: 'Dashboard' },
-    { key: 'homepage', label: 'Homepage' },
-    { key: 'products', label: 'Products' },
-    { key: 'collections', label: 'Collections' },
-    { key: 'journal', label: 'Journal' },
-    { key: 'settings', label: 'Settings' }
+    { key: 'dashboard', label: 'Обзор' },
+    { key: 'homepage', label: 'Главная' },
+    { key: 'products', label: 'Товары' },
+    { key: 'collections', label: 'Коллекции' },
+    { key: 'journal', label: 'Журнал' },
+    { key: 'settings', label: 'Настройки' }
   ]
 
   return (
@@ -154,28 +154,48 @@ function DashboardView({
   return (
     <div className="cms-stack">
       <div>
-        <div className="eyebrow">Dashboard</div>
-        <h1 className="page-title">Atelier CMS</h1>
+        <div className="eyebrow">Панель управления</div>
+        <h1 className="page-title">Административная панель ROZEL</h1>
         <p className="page-text">
-          Private content layer for products, collections, editorial publishing,
-          homepage composition, and house settings.
+          Управление содержимым сайта, товарами, коллекциями, редакционными материалами
+          и ключевыми блоками витрины дома.
         </p>
       </div>
 
       <div className="cms-stat-grid">
         <article className="cms-stat-card">
-          <div className="cms-stat-card__label">Products</div>
+          <div className="cms-stat-card__label">Товары</div>
           <div className="cms-stat-card__value">{productCount}</div>
         </article>
 
         <article className="cms-stat-card">
-          <div className="cms-stat-card__label">Collections</div>
+          <div className="cms-stat-card__label">Коллекции</div>
           <div className="cms-stat-card__value">{collectionCount}</div>
         </article>
 
         <article className="cms-stat-card">
-          <div className="cms-stat-card__label">Journal</div>
+          <div className="cms-stat-card__label">Материалы</div>
           <div className="cms-stat-card__value">{journalCount}</div>
+        </article>
+      </div>
+
+      <div className="cms-grid-2">
+        <article className="cms-panel">
+          <div className="cms-panel__label">Содержимое</div>
+          <h2 className="cms-panel__title">Все ключевые разделы собраны в одной системе.</h2>
+          <p className="cms-panel__text">
+            Главная страница, карточки товаров, коллекции и журнал управляются через
+            единую административную структуру.
+          </p>
+        </article>
+
+        <article className="cms-panel">
+          <div className="cms-panel__label">Публикация</div>
+          <h2 className="cms-panel__title">Контент готов к централизованному управлению.</h2>
+          <p className="cms-panel__text">
+            Панель рассчитана на дальнейшее подключение авторизации, базы данных,
+            загрузки изображений и серверной синхронизации.
+          </p>
         </article>
       </div>
     </div>
@@ -225,109 +245,107 @@ function HomepageView({
   return (
     <div className="cms-stack">
       <div>
-        <div className="eyebrow">Homepage</div>
-        <h1 className="page-title">Homepage Manager</h1>
+        <div className="eyebrow">Главная страница</div>
+        <h1 className="page-title">Редактор главной</h1>
         <p className="page-text">
-          Manage hero copy, featured section text, and storefront messaging.
+          Управление главным экраном, вводным текстом, товарным блоком и featured-секцией.
         </p>
       </div>
 
       <div className="cms-grid-2">
         <form onSubmit={handleSubmit} className="cms-panel">
-          <div className="cms-panel__label">Hero content</div>
+          <div className="cms-panel__label">Контент главной</div>
 
           <div className="cms-form">
             <input
               className="cms-input"
               value={draft.hero.eyebrow}
               onChange={(e) => updateHero('eyebrow', e.target.value)}
-              placeholder="Hero eyebrow"
+              placeholder="Надпись над главным заголовком"
             />
             <textarea
               className="cms-textarea"
               value={draft.hero.title}
               onChange={(e) => updateHero('title', e.target.value)}
-              placeholder="Hero title"
+              placeholder="Главный заголовок"
             />
             <textarea
               className="cms-textarea"
               value={draft.hero.description}
               onChange={(e) => updateHero('description', e.target.value)}
-              placeholder="Hero description"
+              placeholder="Описание главного экрана"
             />
             <input
               className="cms-input"
               value={draft.home.introEyebrow}
               onChange={(e) => updateHome('introEyebrow', e.target.value)}
-              placeholder="Intro eyebrow"
+              placeholder="Надпись над вводным блоком"
             />
             <input
               className="cms-input"
               value={draft.home.introTitle}
               onChange={(e) => updateHome('introTitle', e.target.value)}
-              placeholder="Intro title"
+              placeholder="Заголовок вводного блока"
             />
             <input
               className="cms-input"
               value={draft.home.productsEyebrow}
               onChange={(e) => updateHome('productsEyebrow', e.target.value)}
-              placeholder="Products eyebrow"
+              placeholder="Надпись над товарным блоком"
             />
             <input
               className="cms-input"
               value={draft.home.productsTitle}
               onChange={(e) => updateHome('productsTitle', e.target.value)}
-              placeholder="Products title"
+              placeholder="Заголовок товарного блока"
             />
             <input
               className="cms-input"
               value={draft.home.productsLinkLabel}
               onChange={(e) => updateHome('productsLinkLabel', e.target.value)}
-              placeholder="Products link label"
+              placeholder="Текст ссылки на каталог"
             />
             <input
               className="cms-input"
               value={draft.home.featuredEyebrow}
               onChange={(e) => updateHome('featuredEyebrow', e.target.value)}
-              placeholder="Featured eyebrow"
+              placeholder="Надпись над featured-блоком"
             />
             <input
               className="cms-input"
               value={draft.home.featuredTitle}
               onChange={(e) => updateHome('featuredTitle', e.target.value)}
-              placeholder="Featured title"
+              placeholder="Заголовок featured-блока"
             />
             <textarea
               className="cms-textarea"
               value={draft.home.featuredText}
               onChange={(e) => updateHome('featuredText', e.target.value)}
-              placeholder="Featured text"
+              placeholder="Текст featured-блока"
             />
             <input
               className="cms-input"
               value={draft.home.featuredCta}
               onChange={(e) => updateHome('featuredCta', e.target.value)}
-              placeholder="Featured CTA"
+              placeholder="Текст кнопки featured-блока"
             />
 
             <div className="button-row">
               <button type="submit" className="btn btn--primary">
-                Save to local storage
+                Сохранить
               </button>
 
               <button type="button" className="btn btn--ghost" onClick={onReset}>
-                Reset defaults
+                Сбросить
               </button>
             </div>
 
-            <div className="cms-storage-note">
-              Key: {CMS_STORAGE_KEY}
-            </div>
+            <div className="cms-storage-note">Локальное хранилище: {CMS_STORAGE_KEY}</div>
           </div>
         </form>
 
         <article className="cms-panel">
-          <div className="cms-panel__label">Live preview</div>
+          <div className="cms-panel__label">Предпросмотр</div>
 
           <div className="cms-preview-card">
             <div className="eyebrow">{draft.hero.eyebrow}</div>
@@ -379,7 +397,7 @@ function ProductsView({
       title: title.trim(),
       collection: collection.trim(),
       price: price.trim(),
-      status: 'Draft'
+      status: 'Черновик'
     })
 
     setTitle('')
@@ -389,49 +407,47 @@ function ProductsView({
 
   return (
     <div className="cms-stack">
-      <div className="cms-section-head">
-        <div>
-          <div className="eyebrow">Products</div>
-          <h1 className="page-title">Product Manager</h1>
-        </div>
+      <div>
+        <div className="eyebrow">Товары</div>
+        <h1 className="page-title">Управление товарами</h1>
       </div>
 
       <div className="cms-grid-2">
         <form onSubmit={handleSubmit} className="cms-panel">
-          <div className="cms-panel__label">Create product</div>
+          <div className="cms-panel__label">Новый товар</div>
 
           <div className="cms-form">
             <input
               className="cms-input"
-              placeholder="Product title"
+              placeholder="Название товара"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
             <input
               className="cms-input"
-              placeholder="Collection"
+              placeholder="Коллекция"
               value={collection}
               onChange={(e) => setCollection(e.target.value)}
             />
             <input
               className="cms-input"
-              placeholder="Price"
+              placeholder="Цена"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
             />
 
             <button type="submit" className="btn btn--primary">
-              Add product
+              Добавить товар
             </button>
           </div>
         </form>
 
         <article className="cms-panel">
-          <div className="cms-panel__label">Notes</div>
-          <h2 className="cms-panel__title">Luxury catalog structure.</h2>
+          <div className="cms-panel__label">Каталог</div>
+          <h2 className="cms-panel__title">Структура рассчитана на полноценную витрину.</h2>
           <p className="cms-panel__text">
-            Products are separated from collections so the store can scale into
-            variants, availability, media assets, pricing, and private-client logic.
+            Здесь будут управляться карточки товаров, цены, статус публикации,
+            описание, изображения и дальнейшие параметры каталога.
           </p>
         </article>
       </div>
@@ -440,10 +456,10 @@ function ProductsView({
         <table className="cms-table">
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Collection</th>
-              <th>Price</th>
-              <th>Status</th>
+              <th>Название</th>
+              <th>Коллекция</th>
+              <th>Цена</th>
+              <th>Статус</th>
             </tr>
           </thead>
           <tbody>
@@ -453,7 +469,7 @@ function ProductsView({
                 <td>{item.collection}</td>
                 <td>{item.price}</td>
                 <td>
-                  <span className={`cms-badge ${item.status === 'Published' ? 'is-published' : 'is-draft'}`}>
+                  <span className={`cms-badge ${item.status === 'Опубликовано' ? 'is-published' : 'is-draft'}`}>
                     {item.status}
                   </span>
                 </td>
@@ -487,7 +503,7 @@ function CollectionsView({
       id: `col-${Date.now()}`,
       title: title.trim(),
       type: type.trim(),
-      status: 'Draft'
+      status: 'Черновик'
     })
 
     setTitle('')
@@ -497,40 +513,40 @@ function CollectionsView({
   return (
     <div className="cms-stack">
       <div>
-        <div className="eyebrow">Collections</div>
-        <h1 className="page-title">Collection Manager</h1>
+        <div className="eyebrow">Коллекции</div>
+        <h1 className="page-title">Управление коллекциями</h1>
       </div>
 
       <div className="cms-grid-2">
         <form onSubmit={handleSubmit} className="cms-panel">
-          <div className="cms-panel__label">Create collection</div>
+          <div className="cms-panel__label">Новая коллекция</div>
 
           <div className="cms-form">
             <input
               className="cms-input"
-              placeholder="Collection title"
+              placeholder="Название коллекции"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
             <input
               className="cms-input"
-              placeholder="Type"
+              placeholder="Тип"
               value={type}
               onChange={(e) => setType(e.target.value)}
             />
 
             <button type="submit" className="btn btn--primary">
-              Add collection
+              Добавить коллекцию
             </button>
           </div>
         </form>
 
         <article className="cms-panel">
-          <div className="cms-panel__label">Structure</div>
-          <h2 className="cms-panel__title">Editorial collection architecture.</h2>
+          <div className="cms-panel__label">Архитектура</div>
+          <h2 className="cms-panel__title">Коллекции формируют структуру дома.</h2>
           <p className="cms-panel__text">
-            Collections should remain a premium narrative layer over product groups,
-            not just a raw category tree.
+            Коллекция — это не только группа товаров, а самостоятельный редакционный слой
+            с собственной подачей, акцентами и визуальным характером.
           </p>
         </article>
       </div>
@@ -539,9 +555,9 @@ function CollectionsView({
         <table className="cms-table">
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Type</th>
-              <th>Status</th>
+              <th>Название</th>
+              <th>Тип</th>
+              <th>Статус</th>
             </tr>
           </thead>
           <tbody>
@@ -550,7 +566,7 @@ function CollectionsView({
                 <td>{item.title}</td>
                 <td>{item.type}</td>
                 <td>
-                  <span className={`cms-badge ${item.status === 'Published' ? 'is-published' : 'is-draft'}`}>
+                  <span className={`cms-badge ${item.status === 'Опубликовано' ? 'is-published' : 'is-draft'}`}>
                     {item.status}
                   </span>
                 </td>
@@ -584,7 +600,7 @@ function JournalView({
       id: `jrn-${Date.now()}`,
       title: title.trim(),
       category: category.trim(),
-      status: 'Draft'
+      status: 'Черновик'
     })
 
     setTitle('')
@@ -594,40 +610,40 @@ function JournalView({
   return (
     <div className="cms-stack">
       <div>
-        <div className="eyebrow">Journal</div>
-        <h1 className="page-title">Editorial Manager</h1>
+        <div className="eyebrow">Журнал</div>
+        <h1 className="page-title">Управление журналом</h1>
       </div>
 
       <div className="cms-grid-2">
         <form onSubmit={handleSubmit} className="cms-panel">
-          <div className="cms-panel__label">Create article</div>
+          <div className="cms-panel__label">Новый материал</div>
 
           <div className="cms-form">
             <input
               className="cms-input"
-              placeholder="Article title"
+              placeholder="Заголовок материала"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
             <input
               className="cms-input"
-              placeholder="Category"
+              placeholder="Категория"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             />
 
             <button type="submit" className="btn btn--primary">
-              Add article
+              Добавить материал
             </button>
           </div>
         </form>
 
         <article className="cms-panel">
-          <div className="cms-panel__label">Editorial</div>
-          <h2 className="cms-panel__title">Journal is part of the house language.</h2>
+          <div className="cms-panel__label">Редакционный слой</div>
+          <h2 className="cms-panel__title">Журнал продолжает язык ROZEL.</h2>
           <p className="cms-panel__text">
-            The editorial layer should stay visually aligned with collections,
-            products, and the broader luxury identity of ROZEL.
+            Редакционные материалы должны оставаться в одной системе с коллекциями,
+            товарами и общей luxury-подачей бренда.
           </p>
         </article>
       </div>
@@ -636,9 +652,9 @@ function JournalView({
         <table className="cms-table">
           <thead>
             <tr>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Status</th>
+              <th>Заголовок</th>
+              <th>Категория</th>
+              <th>Статус</th>
             </tr>
           </thead>
           <tbody>
@@ -647,7 +663,7 @@ function JournalView({
                 <td>{item.title}</td>
                 <td>{item.category}</td>
                 <td>
-                  <span className={`cms-badge ${item.status === 'Published' ? 'is-published' : 'is-draft'}`}>
+                  <span className={`cms-badge ${item.status === 'Опубликовано' ? 'is-published' : 'is-draft'}`}>
                     {item.status}
                   </span>
                 </td>
@@ -661,28 +677,28 @@ function JournalView({
 }
 
 function SettingsView() {
-  const siteData = getSiteContent('en')
+  const siteData = getSiteContent('ru')
 
   return (
     <div className="cms-stack">
       <div>
-        <div className="eyebrow">Settings</div>
-        <h1 className="page-title">House Settings</h1>
+        <div className="eyebrow">Настройки</div>
+        <h1 className="page-title">Настройки дома</h1>
       </div>
 
       <div className="cms-grid-2">
         <article className="cms-panel">
-          <div className="cms-panel__label">Brand</div>
+          <div className="cms-panel__label">Бренд</div>
           <h2 className="cms-panel__title">{siteData.brand}</h2>
-          <p className="cms-panel__text">Domain: {siteData.domain}</p>
+          <p className="cms-panel__text">Домен: {siteData.domain}</p>
         </article>
 
         <article className="cms-panel">
-          <div className="cms-panel__label">Admin foundation</div>
-          <h2 className="cms-panel__title">Ready for auth + API wiring.</h2>
+          <div className="cms-panel__label">Система</div>
+          <h2 className="cms-panel__title">Панель готова к дальнейшему подключению.</h2>
           <p className="cms-panel__text">
-            This settings layer will later hold environment-specific admin controls,
-            roles, localization controls, and storefront toggles.
+            Следующий слой — авторизация, база данных, загрузка медиафайлов
+            и серверная синхронизация административного контура.
           </p>
         </article>
       </div>
@@ -736,23 +752,23 @@ export default function AtelierPortalPage() {
       <section className="page-section">
         <div className="container">
           <div className="admin-login">
-            <div className="eyebrow">Atelier Portal</div>
-            <h1 className="page-title">ROZEL CMS</h1>
+            <div className="eyebrow">Административный вход</div>
+            <h1 className="page-title">Панель управления ROZEL</h1>
             <p className="page-text">
-              Private content management layer for the house.
+              Закрытый доступ к управлению содержимым сайта и витриной бренда.
             </p>
 
             <form onSubmit={handleLogin} className="admin-login__form">
               <input
                 type="password"
-                placeholder="Access key"
+                placeholder="Ключ доступа"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="admin-input"
               />
 
               <button className="btn btn--primary">
-                Enter atelier
+                Войти
               </button>
             </form>
           </div>
