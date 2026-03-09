@@ -895,7 +895,8 @@ img {
 
 .admin-input,
 .cms-input,
-.cms-textarea {
+.cms-textarea,
+.cms-table-input {
   width: 100%;
   border-radius: 18px;
   border: 1px solid var(--line);
@@ -913,6 +914,12 @@ img {
   min-height: 118px;
   padding: 16px 18px;
   resize: vertical;
+}
+
+.cms-table-input {
+  min-height: 42px;
+  padding: 0 12px;
+  border-radius: 12px;
 }
 
 .cms-layout {
@@ -989,10 +996,6 @@ img {
   font-weight: 600;
 }
 
-.cms-panel__text {
-  margin-top: 14px;
-}
-
 .cms-form {
   display: grid;
   gap: 12px;
@@ -1028,6 +1031,7 @@ img {
   text-align: left;
   border-bottom: 1px solid var(--line-soft);
   color: rgba(255, 255, 255, 0.82);
+  vertical-align: middle;
 }
 
 .cms-table th {
@@ -1062,6 +1066,38 @@ img {
   height: 1px;
   margin: 18px 0;
   background: var(--line-soft);
+}
+
+.cms-storage-note {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.cms-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 0 4px;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.cms-toggle input {
+  width: 18px;
+  height: 18px;
+}
+
+.cms-topbar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cms-topbar__title {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--soft);
 }
 
 @media (min-width: 768px) {
@@ -1134,6 +1170,12 @@ img {
   .cms-sidebar {
     position: sticky;
     top: 104px;
+  }
+
+  .cms-topbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 
