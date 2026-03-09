@@ -133,7 +133,7 @@ function DashboardView({
         <div className="eyebrow">Панель управления</div>
         <h1 className="page-title">Административная панель ROZEL</h1>
         <p className="page-text">
-          Управление витриной бренда, товарами, коллекциями, журналом и контентом главной страницы.
+          Управление витриной бренда, товарами, коллекциями, журналом и страницами сайта.
         </p>
       </div>
 
@@ -220,11 +220,28 @@ function HomepageView({
     }))
   }
 
-  function updateSeo<K extends keyof CmsSnapshot['seo']>(key: K, value: string) {
+  function updatePageSeo(
+    page: keyof CmsSnapshot['seo'],
+    field: 'title' | 'description',
+    value: string
+  ) {
     setDraft((prev) => ({
       ...prev,
       seo: {
         ...prev.seo,
+        [page]: {
+          ...prev.seo[page],
+          [field]: value
+        }
+      }
+    }))
+  }
+
+  function updateMedia<K extends keyof CmsSnapshot['media']>(key: K, value: string) {
+    setDraft((prev) => ({
+      ...prev,
+      media: {
+        ...prev.media,
         [key]: value
       }
     }))
@@ -243,7 +260,7 @@ function HomepageView({
           Редактор главной {locale === 'ru' ? 'RU' : 'EN'}
         </h1>
         <p className="page-text">
-          Управление контентом, секциями, spotlight-блоками, featured-товаром и SEO.
+          Управление контентом, секциями, spotlight-блоками, featured-товаром, SEO и media-слотами.
         </p>
       </div>
 
@@ -450,18 +467,78 @@ function HomepageView({
               placeholder="Текст"
             />
 
-            <div className="cms-subtitle">SEO</div>
+            <div className="cms-subtitle">SEO: collections</div>
             <input
               className="cms-input"
-              value={draft.seo.title}
-              onChange={(e) => updateSeo('title', e.target.value)}
-              placeholder="SEO title"
+              value={draft.seo.collections.title}
+              onChange={(e) => updatePageSeo('collections', 'title', e.target.value)}
+              placeholder="Collections SEO title"
             />
             <textarea
               className="cms-textarea"
-              value={draft.seo.description}
-              onChange={(e) => updateSeo('description', e.target.value)}
-              placeholder="SEO description"
+              value={draft.seo.collections.description}
+              onChange={(e) => updatePageSeo('collections', 'description', e.target.value)}
+              placeholder="Collections SEO description"
+            />
+
+            <div className="cms-subtitle">SEO: house</div>
+            <input
+              className="cms-input"
+              value={draft.seo.house.title}
+              onChange={(e) => updatePageSeo('house', 'title', e.target.value)}
+              placeholder="House SEO title"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.seo.house.description}
+              onChange={(e) => updatePageSeo('house', 'description', e.target.value)}
+              placeholder="House SEO description"
+            />
+
+            <div className="cms-subtitle">SEO: contact</div>
+            <input
+              className="cms-input"
+              value={draft.seo.contact.title}
+              onChange={(e) => updatePageSeo('contact', 'title', e.target.value)}
+              placeholder="Contact SEO title"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.seo.contact.description}
+              onChange={(e) => updatePageSeo('contact', 'description', e.target.value)}
+              placeholder="Contact SEO description"
+            />
+
+            <div className="cms-subtitle">Media URLs</div>
+            <input
+              className="cms-input"
+              value={draft.media.heroImage}
+              onChange={(e) => updateMedia('heroImage', e.target.value)}
+              placeholder="Hero image URL"
+            />
+            <input
+              className="cms-input"
+              value={draft.media.featuredImage}
+              onChange={(e) => updateMedia('featuredImage', e.target.value)}
+              placeholder="Featured image URL"
+            />
+            <input
+              className="cms-input"
+              value={draft.media.spotlightOneImage}
+              onChange={(e) => updateMedia('spotlightOneImage', e.target.value)}
+              placeholder="Spotlight 1 image URL"
+            />
+            <input
+              className="cms-input"
+              value={draft.media.spotlightTwoImage}
+              onChange={(e) => updateMedia('spotlightTwoImage', e.target.value)}
+              placeholder="Spotlight 2 image URL"
+            />
+            <input
+              className="cms-input"
+              value={draft.media.spotlightThreeImage}
+              onChange={(e) => updateMedia('spotlightThreeImage', e.target.value)}
+              placeholder="Spotlight 3 image URL"
             />
 
             <div className="button-row">
@@ -488,15 +565,15 @@ function HomepageView({
 
             <div className="cms-preview-divider" />
 
-            <div className="cms-preview-card__label">{draft.home.featuredEyebrow}</div>
+            <div className="cms-preview-card__label">Featured</div>
             <div className="cms-preview-card__text">{draft.home.featuredTitle}</div>
             <div className="cms-preview-card__text">{draft.home.featuredText}</div>
 
             <div className="cms-preview-divider" />
 
-            <div className="cms-preview-card__label">SEO</div>
-            <div className="cms-preview-card__text">{draft.seo.title}</div>
-            <div className="cms-preview-card__text">{draft.seo.description}</div>
+            <div className="cms-preview-card__label">SEO collections</div>
+            <div className="cms-preview-card__text">{draft.seo.collections.title}</div>
+            <div className="cms-preview-card__text">{draft.seo.collections.description}</div>
           </div>
         </article>
       </div>
@@ -605,9 +682,9 @@ function ProductsView({
 
         <article className="cms-panel">
           <div className="cms-panel__label">Товарный каталог</div>
-          <h2 className="cms-panel__title">Карточки редактируются и сохраняются.</h2>
+          <h2 className="cms-panel__title">Slug, описание и карточка управляются из панели.</h2>
           <p className="cms-panel__text">
-            Изменения товаров сохраняются локально и используются витриной на главной странице.
+            Изменения товаров сохраняются локально и сразу используются на странице collections и главной.
           </p>
 
           <div className="button-row">
@@ -624,6 +701,7 @@ function ProductsView({
         <table className="cms-table">
           <thead>
             <tr>
+              <th>Slug</th>
               <th>Название</th>
               <th>Коллекция</th>
               <th>Цена</th>
@@ -635,6 +713,13 @@ function ProductsView({
           <tbody>
             {products.map((item) => (
               <tr key={item.slug}>
+                <td>
+                  <input
+                    className="cms-table-input"
+                    value={item.slug}
+                    onChange={(e) => onUpdate(item.slug, 'slug', e.target.value)}
+                  />
+                </td>
                 <td>
                   <input
                     className="cms-table-input"
@@ -679,6 +764,18 @@ function ProductsView({
                     <option value="Черновик">Черновик</option>
                     <option value="Опубликовано">Опубликовано</option>
                   </select>
+                </td>
+              </tr>
+            ))}
+            {products.map((item) => (
+              <tr key={`${item.slug}-desc`}>
+                <td colSpan={7}>
+                  <textarea
+                    className="cms-textarea"
+                    value={item.description}
+                    onChange={(e) => onUpdate(item.slug, 'description', e.target.value)}
+                    placeholder="Описание товара"
+                  />
                 </td>
               </tr>
             ))}
@@ -902,7 +999,7 @@ function SettingsView() {
           <div className="cms-panel__label">Хранилище</div>
           <h2 className="cms-panel__title">Локальная конфигурация активна.</h2>
           <p className="cms-panel__text">
-            Данные главной страницы и товарного блока сохраняются в браузере и доступны после обновления сайта.
+            Главная страница и товарные карточки сохраняются в браузере и используются витриной сайта.
           </p>
         </article>
       </div>
