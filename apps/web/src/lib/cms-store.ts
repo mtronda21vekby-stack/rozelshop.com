@@ -43,13 +43,29 @@ export type CmsSeo = {
   description: string
 }
 
+export type CmsPageSeo = {
+  home: CmsSeo
+  collections: CmsSeo
+  house: CmsSeo
+  contact: CmsSeo
+}
+
+export type CmsMediaSlots = {
+  heroImage: string
+  featuredImage: string
+  spotlightOneImage: string
+  spotlightTwoImage: string
+  spotlightThreeImage: string
+}
+
 export type CmsSnapshot = {
   hero: CmsHeroContent
   home: CmsHomeContent
   sections: CmsHomeSections
   featuredProductSlug: string
   spotlights: CmsSpotlightItem[]
-  seo: CmsSeo
+  seo: CmsPageSeo
+  media: CmsMediaSlots
 }
 
 export type CmsStore = {
@@ -127,9 +143,33 @@ export const defaultCmsStore: CmsStore = {
       }
     ],
     seo: {
-      title: 'ROZEL — модный дом',
-      description:
-        'ROZEL — современный luxury fashion house с коллекциями, редакционной подачей и премиальной витриной.'
+      home: {
+        title: 'ROZEL — модный дом',
+        description:
+          'ROZEL — современный luxury fashion house с коллекциями, редакционной подачей и премиальной витриной.'
+      },
+      collections: {
+        title: 'ROZEL — коллекции',
+        description:
+          'Коллекции ROZEL: outerwear, evening и capsule-направления в единой luxury-подаче.'
+      },
+      house: {
+        title: 'ROZEL — дом моды',
+        description:
+          'Философия дома ROZEL: точность, силуэт, luxury-дисциплина и современная fashion-эстетика.'
+      },
+      contact: {
+        title: 'ROZEL — контакты',
+        description:
+          'Контакты клиентского сервиса и официальные каналы дома ROZEL.'
+      }
+    },
+    media: {
+      heroImage: '',
+      featuredImage: '',
+      spotlightOneImage: '',
+      spotlightTwoImage: '',
+      spotlightThreeImage: ''
     }
   },
   en: {
@@ -187,9 +227,33 @@ export const defaultCmsStore: CmsStore = {
       }
     ],
     seo: {
-      title: 'ROZEL — fashion house',
-      description:
-        'ROZEL is a modern luxury fashion house with curated collections, editorial direction, and a premium storefront.'
+      home: {
+        title: 'ROZEL — fashion house',
+        description:
+          'ROZEL is a modern luxury fashion house with curated collections, editorial direction, and a premium storefront.'
+      },
+      collections: {
+        title: 'ROZEL — collections',
+        description:
+          'Explore ROZEL collections across outerwear, evening, and capsule luxury pieces.'
+      },
+      house: {
+        title: 'ROZEL — house',
+        description:
+          'The house of ROZEL: precision, silhouette, restraint, and a modern luxury identity.'
+      },
+      contact: {
+        title: 'ROZEL — contact',
+        description:
+          'Official contact details and client services for the house of ROZEL.'
+      }
+    },
+    media: {
+      heroImage: '',
+      featuredImage: '',
+      spotlightOneImage: '',
+      spotlightTwoImage: '',
+      spotlightThreeImage: ''
     }
   }
 }
@@ -238,10 +302,7 @@ function sanitizeString(value: unknown, fallback: string): string {
   return typeof value === 'string' ? value : fallback
 }
 
-function sanitizeSpotlight(
-  value: unknown,
-  fallback: CmsSpotlightItem
-): CmsSpotlightItem {
+function sanitizeSpotlight(value: unknown, fallback: CmsSpotlightItem): CmsSpotlightItem {
   if (!value || typeof value !== 'object') {
     return fallback
   }
@@ -265,6 +326,37 @@ function sanitizeSeo(value: unknown, fallback: CmsSeo): CmsSeo {
   return {
     title: sanitizeString(source.title, fallback.title),
     description: sanitizeString(source.description, fallback.description)
+  }
+}
+
+function sanitizePageSeo(value: unknown, fallback: CmsPageSeo): CmsPageSeo {
+  if (!value || typeof value !== 'object') {
+    return fallback
+  }
+
+  const source = value as Partial<CmsPageSeo>
+
+  return {
+    home: sanitizeSeo(source.home, fallback.home),
+    collections: sanitizeSeo(source.collections, fallback.collections),
+    house: sanitizeSeo(source.house, fallback.house),
+    contact: sanitizeSeo(source.contact, fallback.contact)
+  }
+}
+
+function sanitizeMedia(value: unknown, fallback: CmsMediaSlots): CmsMediaSlots {
+  if (!value || typeof value !== 'object') {
+    return fallback
+  }
+
+  const source = value as Partial<CmsMediaSlots>
+
+  return {
+    heroImage: sanitizeString(source.heroImage, fallback.heroImage),
+    featuredImage: sanitizeString(source.featuredImage, fallback.featuredImage),
+    spotlightOneImage: sanitizeString(source.spotlightOneImage, fallback.spotlightOneImage),
+    spotlightTwoImage: sanitizeString(source.spotlightTwoImage, fallback.spotlightTwoImage),
+    spotlightThreeImage: sanitizeString(source.spotlightThreeImage, fallback.spotlightThreeImage)
   }
 }
 
@@ -319,7 +411,8 @@ function sanitizeSnapshot(value: unknown, fallback: CmsSnapshot): CmsSnapshot {
           sanitizeSpotlight(item, fallback.spotlights[index] ?? fallback.spotlights[0])
         )
       : fallback.spotlights,
-    seo: sanitizeSeo(source.seo, fallback.seo)
+    seo: sanitizePageSeo(source.seo, fallback.seo),
+    media: sanitizeMedia(source.media, fallback.media)
   }
 }
 
