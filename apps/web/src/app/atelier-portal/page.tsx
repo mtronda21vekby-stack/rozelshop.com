@@ -467,6 +467,20 @@ function HomepageView({
               placeholder="Текст"
             />
 
+            <div className="cms-subtitle">SEO: главная</div>
+            <input
+              className="cms-input"
+              value={draft.seo.home.title}
+              onChange={(e) => updatePageSeo('home', 'title', e.target.value)}
+              placeholder="Home SEO title"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.seo.home.description}
+              onChange={(e) => updatePageSeo('home', 'description', e.target.value)}
+              placeholder="Home SEO description"
+            />
+
             <div className="cms-subtitle">SEO: collections</div>
             <input
               className="cms-input"
@@ -684,7 +698,7 @@ function ProductsView({
           <div className="cms-panel__label">Товарный каталог</div>
           <h2 className="cms-panel__title">Slug, описание и карточка управляются из панели.</h2>
           <p className="cms-panel__text">
-            Изменения товаров сохраняются локально и сразу используются на странице collections и главной.
+            Изменения товаров сохраняются локально и используются на странице collections и главной.
           </p>
 
           <div className="button-row">
@@ -913,7 +927,7 @@ function JournalView({
   return (
     <div className="cms-stack">
       <div>
-        <div className="eyebrow">Журнал</div>
+        <div className="eyебrow">Журнал</div>
         <h1 className="page-title">Управление журналом</h1>
       </div>
 
