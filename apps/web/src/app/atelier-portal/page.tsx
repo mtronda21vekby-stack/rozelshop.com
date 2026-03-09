@@ -3,10 +3,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import {
   CMS_STORAGE_KEY,
-  defaultCmsSnapshot,
-  readCmsSnapshot,
-  writeCmsSnapshot,
-  type CmsSnapshot
+  defaultCmsStore,
+  readCmsStore,
+  writeCmsStore,
+  type CmsSnapshot,
+  type CmsStore
 } from '../../lib/cms-store'
 import { getSiteContent } from '../../lib/site-data'
 
@@ -17,6 +18,8 @@ type AdminSection =
   | 'collections'
   | 'journal'
   | 'settings'
+
+type AdminLocale = 'ru' | 'en'
 
 type AdminProduct = {
   id: string
@@ -157,8 +160,8 @@ function DashboardView({
         <div className="eyebrow">Панель управления</div>
         <h1 className="page-title">Административная панель ROZEL</h1>
         <p className="page-text">
-          Управление содержимым сайта, товарами, коллекциями, редакционными материалами
-          и ключевыми блоками витрины дома.
+          Управление главной страницей, товарами, коллекциями, редакционными материалами
+          и ключевыми блоками витрины бренда.
         </p>
       </div>
 
@@ -178,36 +181,20 @@ function DashboardView({
           <div className="cms-stat-card__value">{journalCount}</div>
         </article>
       </div>
-
-      <div className="cms-grid-2">
-        <article className="cms-panel">
-          <div className="cms-panel__label">Содержимое</div>
-          <h2 className="cms-panel__title">Все ключевые разделы собраны в одной системе.</h2>
-          <p className="cms-panel__text">
-            Главная страница, карточки товаров, коллекции и журнал управляются через
-            единую административную структуру.
-          </p>
-        </article>
-
-        <article className="cms-panel">
-          <div className="cms-panel__label">Публикация</div>
-          <h2 className="cms-panel__title">Контент готов к централизованному управлению.</h2>
-          <p className="cms-panel__text">
-            Панель рассчитана на дальнейшее подключение авторизации, базы данных,
-            загрузки изображений и серверной синхронизации.
-          </p>
-        </article>
-      </div>
     </div>
   )
 }
 
 function HomepageView({
+  locale,
   snapshot,
+  productOptions,
   onSave,
   onReset
 }: {
+  locale: AdminLocale
   snapshot: CmsSnapshot
+  productOptions: { slug: string; title: string }[]
   onSave: (next: CmsSnapshot) => void
   onReset: () => void
 }) {
@@ -237,6 +224,16 @@ function HomepageView({
     }))
   }
 
+  function updateSection<K extends keyof CmsSnapshot['sections']>(key: K, value: boolean) {
+    setDraft((prev) => ({
+      ...prev,
+      sections: {
+        ...prev.sections,
+        [key]: value
+      }
+    }))
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     onSave(draft)
@@ -246,15 +243,17 @@ function HomepageView({
     <div className="cms-stack">
       <div>
         <div className="eyebrow">Главная страница</div>
-        <h1 className="page-title">Редактор главной</h1>
+        <h1 className="page-title">
+          Редактор главной {locale === 'ru' ? 'RU' : 'EN'}
+        </h1>
         <p className="page-text">
-          Управление главным экраном, вводным текстом, товарным блоком и featured-секцией.
+          Управление контентом, включением секций и выбором featured-товара.
         </p>
       </div>
 
       <div className="cms-grid-2">
         <form onSubmit={handleSubmit} className="cms-panel">
-          <div className="cms-panel__label">Контент главной</div>
+          <div className="cms-panel__label">Контент и структура</div>
 
           <div className="cms-form">
             <input
@@ -273,13 +272,14 @@ function HomepageView({
               className="cms-textarea"
               value={draft.hero.description}
               onChange={(e) => updateHero('description', e.target.value)}
-              placeholder="Описание главного экрана"
+              placeholder="Описание главного блока"
             />
+
             <input
               className="cms-input"
               value={draft.home.introEyebrow}
               onChange={(e) => updateHome('introEyebrow', e.target.value)}
-              placeholder="Надпись над вводным блоком"
+              placeholder="Надпись вводного блока"
             />
             <input
               className="cms-input"
@@ -287,11 +287,12 @@ function HomepageView({
               onChange={(e) => updateHome('introTitle', e.target.value)}
               placeholder="Заголовок вводного блока"
             />
+
             <input
               className="cms-input"
               value={draft.home.productsEyebrow}
               onChange={(e) => updateHome('productsEyebrow', e.target.value)}
-              placeholder="Надпись над товарным блоком"
+              placeholder="Надпись товарного блока"
             />
             <input
               className="cms-input"
@@ -305,11 +306,12 @@ function HomepageView({
               onChange={(e) => updateHome('productsLinkLabel', e.target.value)}
               placeholder="Текст ссылки на каталог"
             />
+
             <input
               className="cms-input"
               value={draft.home.featuredEyebrow}
               onChange={(e) => updateHome('featuredEyebrow', e.target.value)}
-              placeholder="Надпись над featured-блоком"
+              placeholder="Надпись featured-блока"
             />
             <input
               className="cms-input"
@@ -329,6 +331,68 @@ function HomepageView({
               onChange={(e) => updateHome('featuredCta', e.target.value)}
               placeholder="Текст кнопки featured-блока"
             />
+
+            <select
+              className="cms-input"
+              value={draft.featuredProductSlug}
+              onChange={(e) =>
+                setDraft((prev) => ({
+                  ...prev,
+                  featuredProductSlug: e.target.value
+                }))
+              }
+            >
+              {productOptions.map((item) => (
+                <option key={item.slug} value={item.slug}>
+                  Featured: {item.title}
+                </option>
+              ))}
+            </select>
+
+            <label className="cms-toggle">
+              <input
+                type="checkbox"
+                checked={draft.sections.showIntro}
+                onChange={(e) => updateSection('showIntro', e.target.checked)}
+              />
+              <span>Показывать вводный блок</span>
+            </label>
+
+            <label className="cms-toggle">
+              <input
+                type="checkbox"
+                checked={draft.sections.showCollections}
+                onChange={(e) => updateSection('showCollections', e.target.checked)}
+              />
+              <span>Показывать блок коллекций</span>
+            </label>
+
+            <label className="cms-toggle">
+              <input
+                type="checkbox"
+                checked={draft.sections.showProducts}
+                onChange={(e) => updateSection('showProducts', e.target.checked)}
+              />
+              <span>Показывать блок товаров</span>
+            </label>
+
+            <label className="cms-toggle">
+              <input
+                type="checkbox"
+                checked={draft.sections.showFeatured}
+                onChange={(e) => updateSection('showFeatured', e.target.checked)}
+              />
+              <span>Показывать featured-блок</span>
+            </label>
+
+            <label className="cms-toggle">
+              <input
+                type="checkbox"
+                checked={draft.sections.showEditorial}
+                onChange={(e) => updateSection('showEditorial', e.target.checked)}
+              />
+              <span>Показывать editorial-блок</span>
+            </label>
 
             <div className="button-row">
               <button type="submit" className="btn btn--primary">
@@ -367,6 +431,25 @@ function HomepageView({
             <div className="cms-preview-card__label">{draft.home.featuredEyebrow}</div>
             <div className="cms-preview-card__text">{draft.home.featuredTitle}</div>
             <div className="cms-preview-card__text">{draft.home.featuredText}</div>
+
+            <div className="cms-preview-divider" />
+
+            <div className="cms-preview-card__label">Секции</div>
+            <div className="cms-preview-card__text">
+              Вводный блок: {draft.sections.showIntro ? 'вкл' : 'выкл'}
+            </div>
+            <div className="cms-preview-card__text">
+              Коллекции: {draft.sections.showCollections ? 'вкл' : 'выкл'}
+            </div>
+            <div className="cms-preview-card__text">
+              Товары: {draft.sections.showProducts ? 'вкл' : 'выкл'}
+            </div>
+            <div className="cms-preview-card__text">
+              Featured: {draft.sections.showFeatured ? 'вкл' : 'выкл'}
+            </div>
+            <div className="cms-preview-card__text">
+              Editorial: {draft.sections.showEditorial ? 'вкл' : 'выкл'}
+            </div>
           </div>
         </article>
       </div>
@@ -376,10 +459,12 @@ function HomepageView({
 
 function ProductsView({
   products,
-  onAdd
+  onAdd,
+  onUpdate
 }: {
   products: AdminProduct[]
   onAdd: (item: AdminProduct) => void
+  onUpdate: (id: string, field: keyof AdminProduct, value: string) => void
 }) {
   const [title, setTitle] = useState('')
   const [collection, setCollection] = useState('')
@@ -444,10 +529,9 @@ function ProductsView({
 
         <article className="cms-panel">
           <div className="cms-panel__label">Каталог</div>
-          <h2 className="cms-panel__title">Структура рассчитана на полноценную витрину.</h2>
+          <h2 className="cms-panel__title">Редактирование карточек прямо в панели.</h2>
           <p className="cms-panel__text">
-            Здесь будут управляться карточки товаров, цены, статус публикации,
-            описание, изображения и дальнейшие параметры каталога.
+            Здесь можно менять базовые данные карточек: название, коллекцию, цену и статус.
           </p>
         </article>
       </div>
@@ -465,13 +549,36 @@ function ProductsView({
           <tbody>
             {products.map((item) => (
               <tr key={item.id}>
-                <td>{item.title}</td>
-                <td>{item.collection}</td>
-                <td>{item.price}</td>
                 <td>
-                  <span className={`cms-badge ${item.status === 'Опубликовано' ? 'is-published' : 'is-draft'}`}>
-                    {item.status}
-                  </span>
+                  <input
+                    className="cms-table-input"
+                    value={item.title}
+                    onChange={(e) => onUpdate(item.id, 'title', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    className="cms-table-input"
+                    value={item.collection}
+                    onChange={(e) => onUpdate(item.id, 'collection', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input
+                    className="cms-table-input"
+                    value={item.price}
+                    onChange={(e) => onUpdate(item.id, 'price', e.target.value)}
+                  />
+                </td>
+                <td>
+                  <select
+                    className="cms-table-input"
+                    value={item.status}
+                    onChange={(e) => onUpdate(item.id, 'status', e.target.value)}
+                  >
+                    <option value="Черновик">Черновик</option>
+                    <option value="Опубликовано">Опубликовано</option>
+                  </select>
                 </td>
               </tr>
             ))}
@@ -542,11 +649,10 @@ function CollectionsView({
         </form>
 
         <article className="cms-panel">
-          <div className="cms-panel__label">Архитектура</div>
-          <h2 className="cms-panel__title">Коллекции формируют структуру дома.</h2>
+          <div className="cms-panel__label">Структура</div>
+          <h2 className="cms-panel__title">Коллекции формируют архитектуру витрины.</h2>
           <p className="cms-panel__text">
-            Коллекция — это не только группа товаров, а самостоятельный редакционный слой
-            с собственной подачей, акцентами и визуальным характером.
+            Каждая коллекция задаёт отдельный визуальный и товарный слой внутри дома ROZEL.
           </p>
         </article>
       </div>
@@ -639,11 +745,10 @@ function JournalView({
         </form>
 
         <article className="cms-panel">
-          <div className="cms-panel__label">Редакционный слой</div>
-          <h2 className="cms-panel__title">Журнал продолжает язык ROZEL.</h2>
+          <div className="cms-panel__label">Редакционный блок</div>
+          <h2 className="cms-panel__title">Журнал продолжает образ дома.</h2>
           <p className="cms-panel__text">
-            Редакционные материалы должны оставаться в одной системе с коллекциями,
-            товарами и общей luxury-подачей бренда.
+            Контент журнала поддерживает стиль, коллекции и публичную подачу бренда.
           </p>
         </article>
       </div>
@@ -694,11 +799,10 @@ function SettingsView() {
         </article>
 
         <article className="cms-panel">
-          <div className="cms-panel__label">Система</div>
-          <h2 className="cms-panel__title">Панель готова к дальнейшему подключению.</h2>
+          <div className="cms-panel__label">Хранилище</div>
+          <h2 className="cms-panel__title">Локальная конфигурация активна.</h2>
           <p className="cms-panel__text">
-            Следующий слой — авторизация, база данных, загрузка медиафайлов
-            и серверная синхронизация административного контура.
+            Все правки главной страницы сохраняются локально и отображаются на сайте после обновления.
           </p>
         </article>
       </div>
@@ -710,14 +814,15 @@ export default function AtelierPortalPage() {
   const [entered, setEntered] = useState(false)
   const [password, setPassword] = useState('')
   const [section, setSection] = useState<AdminSection>('dashboard')
+  const [locale, setLocale] = useState<AdminLocale>('ru')
 
   const [products, setProducts] = useState<AdminProduct[]>(initialProducts)
   const [collections, setCollections] = useState<AdminCollection[]>(initialCollections)
   const [journal, setJournal] = useState<AdminJournal[]>(initialJournal)
-  const [cmsSnapshot, setCmsSnapshot] = useState<CmsSnapshot>(defaultCmsSnapshot)
+  const [cmsStore, setCmsStore] = useState<CmsStore>(defaultCmsStore)
 
   useEffect(() => {
-    setCmsSnapshot(readCmsSnapshot())
+    setCmsStore(readCmsStore())
   }, [])
 
   const dashboardCounts = useMemo(
@@ -737,14 +842,37 @@ export default function AtelierPortalPage() {
     }
   }
 
-  function handleSaveCms(next: CmsSnapshot) {
-    setCmsSnapshot(next)
-    writeCmsSnapshot(next)
+  function handleSaveSnapshot(next: CmsSnapshot) {
+    const updatedStore: CmsStore = {
+      ...cmsStore,
+      [locale]: next
+    }
+
+    setCmsStore(updatedStore)
+    writeCmsStore(updatedStore)
   }
 
-  function handleResetCms() {
-    setCmsSnapshot(defaultCmsSnapshot)
-    writeCmsSnapshot(defaultCmsSnapshot)
+  function handleResetSnapshot() {
+    const updatedStore: CmsStore = {
+      ...cmsStore,
+      [locale]: defaultCmsStore[locale]
+    }
+
+    setCmsStore(updatedStore)
+    writeCmsStore(updatedStore)
+  }
+
+  function handleUpdateProduct(id: string, field: keyof AdminProduct, value: string) {
+    setProducts((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? {
+              ...item,
+              [field]: value
+            }
+          : item
+      )
+    )
   }
 
   if (!entered) {
@@ -784,6 +912,29 @@ export default function AtelierPortalPage() {
           <AdminSidebar active={section} onChange={setSection} />
 
           <div className="cms-content">
+            <div className="cms-topbar">
+              <div className="cms-topbar__title">
+                Язык витрины
+              </div>
+
+              <div className="catalog-tabs" style={{ marginTop: 0 }}>
+                <button
+                  type="button"
+                  className={`catalog-tab ${locale === 'ru' ? 'is-active' : ''}`}
+                  onClick={() => setLocale('ru')}
+                >
+                  RU
+                </button>
+                <button
+                  type="button"
+                  className={`catalog-tab ${locale === 'en' ? 'is-active' : ''}`}
+                  onClick={() => setLocale('en')}
+                >
+                  EN
+                </button>
+              </div>
+            </div>
+
             {section === 'dashboard' && (
               <DashboardView
                 productCount={dashboardCounts.products}
@@ -794,9 +945,20 @@ export default function AtelierPortalPage() {
 
             {section === 'homepage' && (
               <HomepageView
-                snapshot={cmsSnapshot}
-                onSave={handleSaveCms}
-                onReset={handleResetCms}
+                locale={locale}
+                snapshot={cmsStore[locale]}
+                productOptions={products.map((item) => ({
+                  slug: item.id === 'prd-001'
+                    ? 'noir-tailored-coat'
+                    : item.id === 'prd-002'
+                    ? 'atelier-silk-dress'
+                    : item.id === 'prd-003'
+                    ? 'private-capsule-jacket'
+                    : 'noir-tailored-coat',
+                  title: item.title
+                }))}
+                onSave={handleSaveSnapshot}
+                onReset={handleResetSnapshot}
               />
             )}
 
@@ -804,6 +966,7 @@ export default function AtelierPortalPage() {
               <ProductsView
                 products={products}
                 onAdd={(item) => setProducts((prev) => [item, ...prev])}
+                onUpdate={handleUpdateProduct}
               />
             )}
 
