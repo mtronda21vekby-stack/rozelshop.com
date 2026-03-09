@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import {
   defaultCmsProducts,
@@ -9,21 +10,16 @@ import {
 } from '../../../lib/cms-store'
 import { getSiteContent } from '../../../lib/site-data'
 
-type ProductPageProps = {
-  params: Promise<{
-    slug: string
-  }>
-}
-
-export default function ProductPage({ params }: ProductPageProps) {
+export default function ProductPage() {
+  const params = useParams<{ slug: string }>()
   const siteData = getSiteContent('ru')
-  const [slug, setSlug] = useState('')
   const [products, setProducts] = useState<CmsProduct[]>(defaultCmsProducts)
 
   useEffect(() => {
-    params.then((value) => setSlug(value.slug))
     setProducts(readCmsProducts())
-  }, [params])
+  }, [])
+
+  const slug = typeof params?.slug === 'string' ? params.slug : ''
 
   const product = useMemo(
     () => products.find((item) => item.slug === slug && item.status === 'Опубликовано'),
@@ -36,6 +32,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         <div className="container">
           <div className="eyebrow">ROZEL</div>
           <h1 className="page-title">Изделие не найдено</h1>
+
           <div className="button-row">
             <Link href="/collections" className="btn btn--primary">
               Вернуться в каталог
