@@ -7,7 +7,7 @@ import {
   getSiteContent,
   toLocalizedHref
 } from '../../lib/site-data'
-import { defaultCmsSnapshot, readCmsSnapshot } from '../../lib/cms-store'
+import { defaultCmsStore, readCmsSnapshotByLocale } from '../../lib/cms-store'
 
 type HeroProps = {
   locale: Locale
@@ -15,32 +15,25 @@ type HeroProps = {
 
 export function Hero({ locale }: HeroProps) {
   const siteData = getSiteContent(locale)
-  const [cmsHero, setCmsHero] = useState(defaultCmsSnapshot.hero)
+  const [cmsHero, setCmsHero] = useState(defaultCmsStore[locale].hero)
 
   useEffect(() => {
-    if (locale !== 'ru') {
-      return
-    }
-
-    setCmsHero(readCmsSnapshot().hero)
+    setCmsHero(readCmsSnapshotByLocale(locale).hero)
   }, [locale])
 
-  const hero =
-    locale === 'ru'
-      ? cmsHero
-      : {
-          eyebrow: siteData.hero.eyebrow,
-          title: siteData.hero.title,
-          description: siteData.hero.description,
-          primaryLabel: siteData.hero.primaryCta.label,
-          primaryHref: siteData.hero.primaryCta.href,
-          secondaryLabel: siteData.hero.secondaryCta.label,
-          secondaryHref: siteData.hero.secondaryCta.href,
-          sideTopLabel: siteData.hero.sideTopLabel,
-          sideTopText: siteData.hero.sideTopText,
-          sideBottomLabel: siteData.hero.sideBottomLabel,
-          sideBottomText: siteData.hero.sideBottomText
-        }
+  const hero = cmsHero ?? {
+    eyebrow: siteData.hero.eyebrow,
+    title: siteData.hero.title,
+    description: siteData.hero.description,
+    primaryLabel: siteData.hero.primaryCta.label,
+    primaryHref: siteData.hero.primaryCta.href,
+    secondaryLabel: siteData.hero.secondaryCta.label,
+    secondaryHref: siteData.hero.secondaryCta.href,
+    sideTopLabel: siteData.hero.sideTopLabel,
+    sideTopText: siteData.hero.sideTopText,
+    sideBottomLabel: siteData.hero.sideBottomLabel,
+    sideBottomText: siteData.hero.sideBottomText
+  }
 
   return (
     <section className="hero">
