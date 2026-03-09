@@ -1,9 +1,41 @@
+'use client'
+
 import Link from 'next/link'
+import { useEffect, useMemo, useState } from 'react'
+import { defaultCmsProducts, readCmsProducts, type CmsProduct } from '../../lib/cms-store'
 import { getSiteContent } from '../../lib/site-data'
 
 export default function CollectionsPage() {
   const siteData = getSiteContent('ru')
-  const featured = siteData.products[0]
+  const [products, setProducts] = useState<CmsProduct[]>(defaultCmsProducts)
+  const [activeTab, setActiveTab] = useState<'all' | 'outerwear' | 'evening' | 'capsule'>('all')
+
+  useEffect(() => {
+    setProducts(readCmsProducts())
+  }, [])
+
+  const publishedProducts = useMemo(
+    () => products.filter((item) => item.status === 'Опубликовано'),
+    [products]
+  )
+
+  const filteredProducts = useMemo(() => {
+    if (activeTab === 'all') {
+      return publishedProducts
+    }
+
+    if (activeTab === 'outerwear') {
+      return publishedProducts.filter((item) => item.collection.toLowerCase().includes('noir'))
+    }
+
+    if (activeTab === 'evening') {
+      return publishedProducts.filter((item) => item.collection.toLowerCase().includes('evening'))
+    }
+
+    return publishedProducts.filter((item) => item.collection.toLowerCase().includes('private'))
+  }, [activeTab, publishedProducts])
+
+  const featured = publishedProducts[0]
 
   return (
     <>
@@ -14,14 +46,38 @@ export default function CollectionsPage() {
           <p className="page-text">{siteData.productsPage.description}</p>
 
           <div className="catalog-tabs">
-            <div className="catalog-tab is-active">{siteData.productsPage.tabs.all}</div>
-            <div className="catalog-tab">{siteData.productsPage.tabs.outerwear}</div>
-            <div className="catalog-tab">{siteData.productsPage.tabs.evening}</div>
-            <div className="catalog-tab">{siteData.productsPage.tabs.capsule}</div>
+            <button
+              type="button"
+              className={`catalog-tab ${activeTab === 'all' ? 'is-active' : ''}`}
+              onClick={() => setActiveTab('all')}
+            >
+              {siteData.productsPage.tabs.all}
+            </button>
+            <button
+              type="button"
+              className={`catalog-tab ${activeTab === 'outerwear' ? 'is-active' : ''}`}
+              onClick={() => setActiveTab('outerwear')}
+            >
+              {siteData.productsPage.tabs.outerwear}
+            </button>
+            <button
+              type="button"
+              className={`catalog-tab ${activeTab === 'evening' ? 'is-active' : ''}`}
+              onClick={() => setActiveTab('evening')}
+            >
+              {siteData.productsPage.tabs.evening}
+            </button>
+            <button
+              type="button"
+              className={`catalog-tab ${activeTab === 'capsule' ? 'is-active' : ''}`}
+              onClick={() => setActiveTab('capsule')}
+            >
+              {siteData.productsPage.tabs.capsule}
+            </button>
           </div>
 
           <div className="grid grid--3" style={{ marginTop: 34 }}>
-            {siteData.products.map((item) => (
+            {filteredProducts.map((item) => (
               <article key={item.slug} className="card">
                 <div className="card__media card__media--soft" />
 
@@ -44,26 +100,28 @@ export default function CollectionsPage() {
         </div>
       </section>
 
-      <section className="page-section page-divider">
-        <div className="container">
-          <div className="featured-product">
-            <div className="featured-product__media" />
+      {featured && (
+        <section className="page-section page-divider">
+          <div className="container">
+            <div className="featured-product">
+              <div className="featured-product__media" />
 
-            <div>
-              <div className="eyebrow">Featured</div>
-              <h2 className="featured-product__title">{featured.title}</h2>
-              <p className="featured-product__text">{siteData.productsPage.featuredText}</p>
+              <div>
+                <div className="eyebrow">Featured</div>
+                <h2 className="featured-product__title">{featured.title}</h2>
+                <p className="featured-product__text">{siteData.productsPage.featuredText}</p>
 
-              <div className="featured-product__meta">
-                <div className="card__price">{featured.price}</div>
-                <Link href={`/product/${featured.slug}`} className="btn btn--primary">
-                  Открыть изделие
-                </Link>
+                <div className="featured-product__meta">
+                  <div className="card__price">{featured.price}</div>
+                  <Link href={`/product/${featured.slug}`} className="btn btn--primary">
+                    Открыть изделие
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   )
 }
