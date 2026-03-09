@@ -1,86 +1,33 @@
-import Link from 'next/link'
-import { getSiteContent } from '../../../lib/site-data'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { defaultCmsStore, readCmsSnapshotByLocale, type CmsSnapshot } from '../../../lib/cms-store'
 
 export default function EnglishContactPage() {
-  const siteData = getSiteContent('en')
+  const [snapshot, setSnapshot] = useState<CmsSnapshot>(defaultCmsStore.en)
+
+  useEffect(() => {
+    setSnapshot(readCmsSnapshotByLocale('en'))
+  }, [])
 
   return (
-    <>
-      <section className="page-section">
-        <div className="container">
+    <section className="page-section">
+      <div className="container">
+        <div className="eyebrow">{snapshot.contact.eyebrow}</div>
+        <h1 className="page-title">{snapshot.contact.title}</h1>
 
-          <div className="eyebrow">
-            {siteData.contactPage.eyebrow}
-          </div>
+        <div className="contact-grid" style={{ marginTop: 28 }}>
+          <article className="card contact-card">
+            <div className="card__label">{snapshot.contact.emailLabel}</div>
+            <div className="contact-card__value">{snapshot.contact.email}</div>
+          </article>
 
-          <h1 className="page-title">
-            {siteData.contactPage.title}
-          </h1>
-
-          <div
-            className="contact-grid"
-            style={{ marginTop: 34 }}
-          >
-
-            <article className="card contact-card">
-              <div className="card__label">
-                {siteData.contactPage.emailLabel}
-              </div>
-
-              <div className="contact-card__value">
-                {siteData.contactPage.email}
-              </div>
-            </article>
-
-            <article className="card contact-card">
-              <div className="card__label">
-                {siteData.contactPage.presenceLabel}
-              </div>
-
-              <div className="contact-card__value">
-                {siteData.contactPage.city}
-              </div>
-            </article>
-
-          </div>
-
+          <article className="card contact-card">
+            <div className="card__label">{snapshot.contact.presenceLabel}</div>
+            <div className="contact-card__value">{snapshot.contact.city}</div>
+          </article>
         </div>
-      </section>
-
-      <section className="page-section page-divider">
-        <div className="container">
-
-          <div className="cta-band">
-            <div className="cta-band__row">
-
-              <div>
-                <div className="eyebrow">
-                  CLIENT SERVICES
-                </div>
-
-                <h2 className="cta-band__title">
-                  Connection to the house of ROZEL.
-                </h2>
-
-                <p className="cta-band__text">
-                  The next stage is a complete client service layer,
-                  private client flows, requests, appointment scenarios,
-                  and the service infrastructure of the house.
-                </p>
-              </div>
-
-              <Link
-                href="/en/house"
-                className="btn btn--primary"
-              >
-                Enter the house
-              </Link>
-
-            </div>
-          </div>
-
-        </div>
-      </section>
-    </>
+      </div>
+    </section>
   )
 }
