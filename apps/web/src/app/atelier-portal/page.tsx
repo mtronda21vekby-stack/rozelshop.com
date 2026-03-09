@@ -1,15 +1,21 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { defaultCmsSnapshot, type CmsSnapshot } from '../../lib/cms-store'
+import { useEffect, useMemo, useState } from 'react'
+import {
+  CMS_STORAGE_KEY,
+  defaultCmsSnapshot,
+  readCmsSnapshot,
+  writeCmsSnapshot,
+  type CmsSnapshot
+} from '../../lib/cms-store'
 import { getSiteContent } from '../../lib/site-data'
 
 type AdminSection =
   | 'dashboard'
+  | 'homepage'
   | 'products'
   | 'collections'
   | 'journal'
-  | 'homepage'
   | 'settings'
 
 type AdminProduct = {
@@ -172,52 +178,48 @@ function DashboardView({
           <div className="cms-stat-card__value">{journalCount}</div>
         </article>
       </div>
-
-      <div className="cms-grid-2">
-        <article className="cms-panel">
-          <div className="cms-panel__label">Publishing status</div>
-          <h2 className="cms-panel__title">CMS domains are now separated.</h2>
-          <p className="cms-panel__text">
-            Homepage, products, collections, journal, and settings are isolated into
-            independent admin zones ready for future API binding.
-          </p>
-        </article>
-
-        <article className="cms-panel">
-          <div className="cms-panel__label">Next step</div>
-          <h2 className="cms-panel__title">Bind real persistence and auth.</h2>
-          <p className="cms-panel__text">
-            The admin shell is ready for secure auth, backend CRUD, media handling,
-            and storefront sync.
-          </p>
-        </article>
-      </div>
     </div>
   )
 }
 
 function HomepageView({
   snapshot,
-  onUpdate
+  onSave,
+  onReset
 }: {
   snapshot: CmsSnapshot
-  onUpdate: (next: CmsSnapshot) => void
+  onSave: (next: CmsSnapshot) => void
+  onReset: () => void
 }) {
   const [draft, setDraft] = useState<CmsSnapshot>(snapshot)
 
-  function update<K extends keyof CmsSnapshot>(section: K, key: keyof CmsSnapshot[K], value: string) {
+  useEffect(() => {
+    setDraft(snapshot)
+  }, [snapshot])
+
+  function updateHero<K extends keyof CmsSnapshot['hero']>(key: K, value: string) {
     setDraft((prev) => ({
       ...prev,
-      [section]: {
-        ...prev[section],
+      hero: {
+        ...prev.hero,
         [key]: value
       }
     }))
   }
 
-  function handleSave(e: React.FormEvent) {
+  function updateHome<K extends keyof CmsSnapshot['home']>(key: K, value: string) {
+    setDraft((prev) => ({
+      ...prev,
+      home: {
+        ...prev.home,
+        [key]: value
+      }
+    }))
+  }
+
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    onUpdate(draft)
+    onSave(draft)
   }
 
   return (
@@ -226,61 +228,101 @@ function HomepageView({
         <div className="eyebrow">Homepage</div>
         <h1 className="page-title">Homepage Manager</h1>
         <p className="page-text">
-          Control hero copy, featured messaging, and the main storefront narrative.
+          Manage hero copy, featured section text, and storefront messaging.
         </p>
       </div>
 
       <div className="cms-grid-2">
-        <form onSubmit={handleSave} className="cms-panel">
+        <form onSubmit={handleSubmit} className="cms-panel">
           <div className="cms-panel__label">Hero content</div>
 
           <div className="cms-form">
             <input
               className="cms-input"
               value={draft.hero.eyebrow}
-              onChange={(e) => update('hero', 'eyebrow', e.target.value)}
-              placeholder="Eyebrow"
+              onChange={(e) => updateHero('eyebrow', e.target.value)}
+              placeholder="Hero eyebrow"
             />
             <textarea
               className="cms-textarea"
               value={draft.hero.title}
-              onChange={(e) => update('hero', 'title', e.target.value)}
+              onChange={(e) => updateHero('title', e.target.value)}
               placeholder="Hero title"
             />
             <textarea
               className="cms-textarea"
               value={draft.hero.description}
-              onChange={(e) => update('hero', 'description', e.target.value)}
+              onChange={(e) => updateHero('description', e.target.value)}
               placeholder="Hero description"
             />
             <input
               className="cms-input"
+              value={draft.home.introEyebrow}
+              onChange={(e) => updateHome('introEyebrow', e.target.value)}
+              placeholder="Intro eyebrow"
+            />
+            <input
+              className="cms-input"
               value={draft.home.introTitle}
-              onChange={(e) => update('home', 'introTitle', e.target.value)}
+              onChange={(e) => updateHome('introTitle', e.target.value)}
               placeholder="Intro title"
             />
             <input
               className="cms-input"
+              value={draft.home.productsEyebrow}
+              onChange={(e) => updateHome('productsEyebrow', e.target.value)}
+              placeholder="Products eyebrow"
+            />
+            <input
+              className="cms-input"
               value={draft.home.productsTitle}
-              onChange={(e) => update('home', 'productsTitle', e.target.value)}
+              onChange={(e) => updateHome('productsTitle', e.target.value)}
               placeholder="Products title"
             />
             <input
               className="cms-input"
+              value={draft.home.productsLinkLabel}
+              onChange={(e) => updateHome('productsLinkLabel', e.target.value)}
+              placeholder="Products link label"
+            />
+            <input
+              className="cms-input"
+              value={draft.home.featuredEyebrow}
+              onChange={(e) => updateHome('featuredEyebrow', e.target.value)}
+              placeholder="Featured eyebrow"
+            />
+            <input
+              className="cms-input"
               value={draft.home.featuredTitle}
-              onChange={(e) => update('home', 'featuredTitle', e.target.value)}
+              onChange={(e) => updateHome('featuredTitle', e.target.value)}
               placeholder="Featured title"
             />
             <textarea
               className="cms-textarea"
               value={draft.home.featuredText}
-              onChange={(e) => update('home', 'featuredText', e.target.value)}
+              onChange={(e) => updateHome('featuredText', e.target.value)}
               placeholder="Featured text"
             />
+            <input
+              className="cms-input"
+              value={draft.home.featuredCta}
+              onChange={(e) => updateHome('featuredCta', e.target.value)}
+              placeholder="Featured CTA"
+            />
 
-            <button type="submit" className="btn btn--primary">
-              Save snapshot
-            </button>
+            <div className="button-row">
+              <button type="submit" className="btn btn--primary">
+                Save to local storage
+              </button>
+
+              <button type="button" className="btn btn--ghost" onClick={onReset}>
+                Reset defaults
+              </button>
+            </div>
+
+            <div className="cms-storage-note">
+              Key: {CMS_STORAGE_KEY}
+            </div>
           </div>
         </form>
 
@@ -294,18 +336,19 @@ function HomepageView({
 
             <div className="cms-preview-divider" />
 
-            <div className="cms-preview-card__label">Homepage intro</div>
+            <div className="cms-preview-card__label">{draft.home.introEyebrow}</div>
             <div className="cms-preview-card__text">{draft.home.introTitle}</div>
 
             <div className="cms-preview-divider" />
 
-            <div className="cms-preview-card__label">Product section</div>
+            <div className="cms-preview-card__label">{draft.home.productsEyebrow}</div>
             <div className="cms-preview-card__text">{draft.home.productsTitle}</div>
 
             <div className="cms-preview-divider" />
 
-            <div className="cms-preview-card__label">Featured</div>
+            <div className="cms-preview-card__label">{draft.home.featuredEyebrow}</div>
             <div className="cms-preview-card__text">{draft.home.featuredTitle}</div>
+            <div className="cms-preview-card__text">{draft.home.featuredText}</div>
           </div>
         </article>
       </div>
@@ -631,9 +674,7 @@ function SettingsView() {
         <article className="cms-panel">
           <div className="cms-panel__label">Brand</div>
           <h2 className="cms-panel__title">{siteData.brand}</h2>
-          <p className="cms-panel__text">
-            Domain: {siteData.domain}
-          </p>
+          <p className="cms-panel__text">Domain: {siteData.domain}</p>
         </article>
 
         <article className="cms-panel">
@@ -659,6 +700,10 @@ export default function AtelierPortalPage() {
   const [journal, setJournal] = useState<AdminJournal[]>(initialJournal)
   const [cmsSnapshot, setCmsSnapshot] = useState<CmsSnapshot>(defaultCmsSnapshot)
 
+  useEffect(() => {
+    setCmsSnapshot(readCmsSnapshot())
+  }, [])
+
   const dashboardCounts = useMemo(
     () => ({
       products: products.length,
@@ -674,6 +719,16 @@ export default function AtelierPortalPage() {
     if (password === 'rozel-admin') {
       setEntered(true)
     }
+  }
+
+  function handleSaveCms(next: CmsSnapshot) {
+    setCmsSnapshot(next)
+    writeCmsSnapshot(next)
+  }
+
+  function handleResetCms() {
+    setCmsSnapshot(defaultCmsSnapshot)
+    writeCmsSnapshot(defaultCmsSnapshot)
   }
 
   if (!entered) {
@@ -722,7 +777,11 @@ export default function AtelierPortalPage() {
             )}
 
             {section === 'homepage' && (
-              <HomepageView snapshot={cmsSnapshot} onUpdate={setCmsSnapshot} />
+              <HomepageView
+                snapshot={cmsSnapshot}
+                onSave={handleSaveCms}
+                onReset={handleResetCms}
+              />
             )}
 
             {section === 'products' && (
