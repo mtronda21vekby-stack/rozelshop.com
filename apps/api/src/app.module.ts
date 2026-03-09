@@ -7,9 +7,11 @@ import { HealthModule } from './modules/health/health.module';
 import { CatalogModule } from './modules/catalog/catalog.module';
 import { SettingsModule } from './modules/settings/settings.module';
 import { UsersModule } from './modules/users/users.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
+    PrismaModule,
     HealthModule,
     AuthModule,
     UsersModule,
@@ -17,7 +19,7 @@ import { UsersModule } from './modules/users/users.module';
     CollectionsModule,
     CmsModule,
     SettingsModule,
-    AuditModule,
-  ],
+    AuditModule
+  ]
 })
 export class AppModule {}
