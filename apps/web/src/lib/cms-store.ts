@@ -58,6 +58,23 @@ export type CmsMediaSlots = {
   spotlightThreeImage: string
 }
 
+export type CmsHouseContent = {
+  eyebrow: string
+  title: string
+  paragraphOne: string
+  paragraphTwo: string
+  paragraphThree: string
+}
+
+export type CmsContactContent = {
+  eyebrow: string
+  title: string
+  emailLabel: string
+  presenceLabel: string
+  email: string
+  city: string
+}
+
 export type CmsSnapshot = {
   hero: CmsHeroContent
   home: CmsHomeContent
@@ -66,6 +83,8 @@ export type CmsSnapshot = {
   spotlights: CmsSpotlightItem[]
   seo: CmsPageSeo
   media: CmsMediaSlots
+  house: CmsHouseContent
+  contact: CmsContactContent
 }
 
 export type CmsStore = {
@@ -170,6 +189,24 @@ export const defaultCmsStore: CmsStore = {
       spotlightOneImage: '',
       spotlightTwoImage: '',
       spotlightThreeImage: ''
+    },
+    house: {
+      eyebrow: 'Дом моды',
+      title: 'ROZEL строится на точности, сдержанности и силуэте.',
+      paragraphOne:
+        'Дом формируется через тихий подход к luxury: меньше жестов, сильнее форма, чище пропорция и жёстче визуальная дисциплина.',
+      paragraphTwo:
+        'ROZEL рассматривает тейлоринг, вечернюю конструкцию и editorial-подачу как единую систему. Вещь, кампания и клиентский опыт должны ощущаться согласованно.',
+      paragraphThree:
+        'Цифровая основа дома создаётся как полноценная fashion-платформа с коллекциями, клиентским сервисом и закрытым административным контуром.'
+    },
+    contact: {
+      eyebrow: 'Контакты',
+      title: 'Клиентский сервис и контакты дома.',
+      emailLabel: 'Email',
+      presenceLabel: 'Присутствие',
+      email: 'clientservices@rozelshop.com',
+      city: 'Paris / Online'
     }
   },
   en: {
@@ -254,6 +291,24 @@ export const defaultCmsStore: CmsStore = {
       spotlightOneImage: '',
       spotlightTwoImage: '',
       spotlightThreeImage: ''
+    },
+    house: {
+      eyebrow: 'House',
+      title: 'ROZEL is built on precision, restraint, and silhouette.',
+      paragraphOne:
+        'The house is shaped by a quiet approach to luxury: fewer gestures, stronger forms, cleaner proportions, and stricter visual discipline.',
+      paragraphTwo:
+        'ROZEL treats tailoring, evening structure, and editorial direction as one continuous system. The garment, the campaign, and the client experience are designed to feel aligned.',
+      paragraphThree:
+        'The digital house is built as a complete fashion platform with collections, client services, and a private administrative layer.'
+    },
+    contact: {
+      eyebrow: 'Contact',
+      title: 'Client services and house contact.',
+      emailLabel: 'Email',
+      presenceLabel: 'Presence',
+      email: 'clientservices@rozelshop.com',
+      city: 'Paris / Online'
     }
   }
 }
@@ -360,6 +415,39 @@ function sanitizeMedia(value: unknown, fallback: CmsMediaSlots): CmsMediaSlots {
   }
 }
 
+function sanitizeHouse(value: unknown, fallback: CmsHouseContent): CmsHouseContent {
+  if (!value || typeof value !== 'object') {
+    return fallback
+  }
+
+  const source = value as Partial<CmsHouseContent>
+
+  return {
+    eyebrow: sanitizeString(source.eyebrow, fallback.eyebrow),
+    title: sanitizeString(source.title, fallback.title),
+    paragraphOne: sanitizeString(source.paragraphOne, fallback.paragraphOne),
+    paragraphTwo: sanitizeString(source.paragraphTwo, fallback.paragraphTwo),
+    paragraphThree: sanitizeString(source.paragraphThree, fallback.paragraphThree)
+  }
+}
+
+function sanitizeContact(value: unknown, fallback: CmsContactContent): CmsContactContent {
+  if (!value || typeof value !== 'object') {
+    return fallback
+  }
+
+  const source = value as Partial<CmsContactContent>
+
+  return {
+    eyebrow: sanitizeString(source.eyebrow, fallback.eyebrow),
+    title: sanitizeString(source.title, fallback.title),
+    emailLabel: sanitizeString(source.emailLabel, fallback.emailLabel),
+    presenceLabel: sanitizeString(source.presenceLabel, fallback.presenceLabel),
+    email: sanitizeString(source.email, fallback.email),
+    city: sanitizeString(source.city, fallback.city)
+  }
+}
+
 function sanitizeSnapshot(value: unknown, fallback: CmsSnapshot): CmsSnapshot {
   if (!value || typeof value !== 'object') {
     return fallback
@@ -412,7 +500,9 @@ function sanitizeSnapshot(value: unknown, fallback: CmsSnapshot): CmsSnapshot {
         )
       : fallback.spotlights,
     seo: sanitizePageSeo(source.seo, fallback.seo),
-    media: sanitizeMedia(source.media, fallback.media)
+    media: sanitizeMedia(source.media, fallback.media),
+    house: sanitizeHouse(source.house, fallback.house),
+    contact: sanitizeContact(source.contact, fallback.contact)
   }
 }
 
