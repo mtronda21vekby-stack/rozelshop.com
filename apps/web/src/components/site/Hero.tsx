@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import {
   Locale,
-  getSiteContent,
   toLocalizedHref
 } from '../../lib/site-data'
 import { defaultCmsStore, readCmsSnapshotByLocale } from '../../lib/cms-store'
@@ -14,26 +13,21 @@ type HeroProps = {
 }
 
 export function Hero({ locale }: HeroProps) {
-  const siteData = getSiteContent(locale)
-  const [cmsHero, setCmsHero] = useState(defaultCmsStore[locale].hero)
+  const [snapshot, setSnapshot] = useState(defaultCmsStore[locale])
 
   useEffect(() => {
-    setCmsHero(readCmsSnapshotByLocale(locale).hero)
+    setSnapshot(readCmsSnapshotByLocale(locale))
   }, [locale])
 
-  const hero = cmsHero ?? {
-    eyebrow: siteData.hero.eyebrow,
-    title: siteData.hero.title,
-    description: siteData.hero.description,
-    primaryLabel: siteData.hero.primaryCta.label,
-    primaryHref: siteData.hero.primaryCta.href,
-    secondaryLabel: siteData.hero.secondaryCta.label,
-    secondaryHref: siteData.hero.secondaryCta.href,
-    sideTopLabel: siteData.hero.sideTopLabel,
-    sideTopText: siteData.hero.sideTopText,
-    sideBottomLabel: siteData.hero.sideBottomLabel,
-    sideBottomText: siteData.hero.sideBottomText
-  }
+  const hero = snapshot.hero
+  const heroStyle =
+    snapshot.media.heroImage.trim().length > 0
+      ? {
+          backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.34), rgba(0,0,0,0.58)), url(${snapshot.media.heroImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }
+      : undefined
 
   return (
     <section className="hero">
@@ -63,7 +57,7 @@ export function Hero({ locale }: HeroProps) {
         </div>
 
         <div className="hero__stack">
-          <div className="panel panel--large">
+          <div className="panel panel--large" style={heroStyle}>
             <div className="panel__label">{hero.sideTopLabel}</div>
             <div className="panel__text-large">{hero.sideTopText}</div>
           </div>
