@@ -20,6 +20,7 @@ type AdminSection =
   | 'dashboard'
   | 'homepage'
   | 'products'
+  | 'pages'
   | 'collections'
   | 'journal'
   | 'settings'
@@ -93,6 +94,7 @@ function AdminSidebar({
     { key: 'dashboard', label: 'Обзор' },
     { key: 'homepage', label: 'Главная' },
     { key: 'products', label: 'Товары' },
+    { key: 'pages', label: 'Страницы' },
     { key: 'collections', label: 'Коллекции' },
     { key: 'journal', label: 'Журнал' },
     { key: 'settings', label: 'Настройки' }
@@ -259,9 +261,6 @@ function HomepageView({
         <h1 className="page-title">
           Редактор главной {locale === 'ru' ? 'RU' : 'EN'}
         </h1>
-        <p className="page-text">
-          Управление контентом, секциями, spotlight-блоками, featured-товаром, SEO и media-слотами.
-        </p>
       </div>
 
       <div className="cms-grid-2">
@@ -481,48 +480,6 @@ function HomepageView({
               placeholder="Home SEO description"
             />
 
-            <div className="cms-subtitle">SEO: collections</div>
-            <input
-              className="cms-input"
-              value={draft.seo.collections.title}
-              onChange={(e) => updatePageSeo('collections', 'title', e.target.value)}
-              placeholder="Collections SEO title"
-            />
-            <textarea
-              className="cms-textarea"
-              value={draft.seo.collections.description}
-              onChange={(e) => updatePageSeo('collections', 'description', e.target.value)}
-              placeholder="Collections SEO description"
-            />
-
-            <div className="cms-subtitle">SEO: house</div>
-            <input
-              className="cms-input"
-              value={draft.seo.house.title}
-              onChange={(e) => updatePageSeo('house', 'title', e.target.value)}
-              placeholder="House SEO title"
-            />
-            <textarea
-              className="cms-textarea"
-              value={draft.seo.house.description}
-              onChange={(e) => updatePageSeo('house', 'description', e.target.value)}
-              placeholder="House SEO description"
-            />
-
-            <div className="cms-subtitle">SEO: contact</div>
-            <input
-              className="cms-input"
-              value={draft.seo.contact.title}
-              onChange={(e) => updatePageSeo('contact', 'title', e.target.value)}
-              placeholder="Contact SEO title"
-            />
-            <textarea
-              className="cms-textarea"
-              value={draft.seo.contact.description}
-              onChange={(e) => updatePageSeo('contact', 'description', e.target.value)}
-              placeholder="Contact SEO description"
-            />
-
             <div className="cms-subtitle">Media URLs</div>
             <input
               className="cms-input"
@@ -582,12 +539,216 @@ function HomepageView({
             <div className="cms-preview-card__label">Featured</div>
             <div className="cms-preview-card__text">{draft.home.featuredTitle}</div>
             <div className="cms-preview-card__text">{draft.home.featuredText}</div>
+          </div>
+        </article>
+      </div>
+    </div>
+  )
+}
+
+function PagesView({
+  locale,
+  snapshot,
+  onSave,
+  onReset
+}: {
+  locale: AdminLocale
+  snapshot: CmsSnapshot
+  onSave: (next: CmsSnapshot) => void
+  onReset: () => void
+}) {
+  const [draft, setDraft] = useState<CmsSnapshot>(snapshot)
+
+  useEffect(() => {
+    setDraft(snapshot)
+  }, [snapshot])
+
+  function updateHouse<K extends keyof CmsSnapshot['house']>(key: K, value: string) {
+    setDraft((prev) => ({
+      ...prev,
+      house: {
+        ...prev.house,
+        [key]: value
+      }
+    }))
+  }
+
+  function updateContact<K extends keyof CmsSnapshot['contact']>(key: K, value: string) {
+    setDraft((prev) => ({
+      ...prev,
+      contact: {
+        ...prev.contact,
+        [key]: value
+      }
+    }))
+  }
+
+  function updateSeo(
+    page: 'collections' | 'house' | 'contact',
+    field: 'title' | 'description',
+    value: string
+  ) {
+    setDraft((prev) => ({
+      ...prev,
+      seo: {
+        ...prev.seo,
+        [page]: {
+          ...prev.seo[page],
+          [field]: value
+        }
+      }
+    }))
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    onSave(draft)
+  }
+
+  return (
+    <div className="cms-stack">
+      <div>
+        <div className="eyebrow">Страницы</div>
+        <h1 className="page-title">
+          Редактор страниц {locale === 'ru' ? 'RU' : 'EN'}
+        </h1>
+      </div>
+
+      <div className="cms-grid-2">
+        <form onSubmit={handleSubmit} className="cms-panel">
+          <div className="cms-panel__label">House</div>
+
+          <div className="cms-form">
+            <input
+              className="cms-input"
+              value={draft.house.eyebrow}
+              onChange={(e) => updateHouse('eyebrow', e.target.value)}
+              placeholder="Eyebrow"
+            />
+            <input
+              className="cms-input"
+              value={draft.house.title}
+              onChange={(e) => updateHouse('title', e.target.value)}
+              placeholder="Заголовок"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.house.paragraphOne}
+              onChange={(e) => updateHouse('paragraphOne', e.target.value)}
+              placeholder="Абзац 1"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.house.paragraphTwo}
+              onChange={(e) => updateHouse('paragraphTwo', e.target.value)}
+              placeholder="Абзац 2"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.house.paragraphThree}
+              onChange={(e) => updateHouse('paragraphThree', e.target.value)}
+              placeholder="Абзац 3"
+            />
+
+            <div className="cms-subtitle">Contact</div>
+            <input
+              className="cms-input"
+              value={draft.contact.eyebrow}
+              onChange={(e) => updateContact('eyebrow', e.target.value)}
+              placeholder="Eyebrow"
+            />
+            <input
+              className="cms-input"
+              value={draft.contact.title}
+              onChange={(e) => updateContact('title', e.target.value)}
+              placeholder="Заголовок"
+            />
+            <input
+              className="cms-input"
+              value={draft.contact.emailLabel}
+              onChange={(e) => updateContact('emailLabel', e.target.value)}
+              placeholder="Label email"
+            />
+            <input
+              className="cms-input"
+              value={draft.contact.presenceLabel}
+              onChange={(e) => updateContact('presenceLabel', e.target.value)}
+              placeholder="Label presence"
+            />
+            <input
+              className="cms-input"
+              value={draft.contact.email}
+              onChange={(e) => updateContact('email', e.target.value)}
+              placeholder="Email"
+            />
+            <input
+              className="cms-input"
+              value={draft.contact.city}
+              onChange={(e) => updateContact('city', e.target.value)}
+              placeholder="City / Presence"
+            />
+
+            <div className="cms-subtitle">SEO</div>
+            <input
+              className="cms-input"
+              value={draft.seo.collections.title}
+              onChange={(e) => updateSeo('collections', 'title', e.target.value)}
+              placeholder="Collections SEO title"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.seo.collections.description}
+              onChange={(e) => updateSeo('collections', 'description', e.target.value)}
+              placeholder="Collections SEO description"
+            />
+            <input
+              className="cms-input"
+              value={draft.seo.house.title}
+              onChange={(e) => updateSeo('house', 'title', e.target.value)}
+              placeholder="House SEO title"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.seo.house.description}
+              onChange={(e) => updateSeo('house', 'description', e.target.value)}
+              placeholder="House SEO description"
+            />
+            <input
+              className="cms-input"
+              value={draft.seo.contact.title}
+              onChange={(e) => updateSeo('contact', 'title', e.target.value)}
+              placeholder="Contact SEO title"
+            />
+            <textarea
+              className="cms-textarea"
+              value={draft.seo.contact.description}
+              onChange={(e) => updateSeo('contact', 'description', e.target.value)}
+              placeholder="Contact SEO description"
+            />
+
+            <div className="button-row">
+              <button type="submit" className="btn btn--primary">
+                Сохранить
+              </button>
+              <button type="button" className="btn btn--ghost" onClick={onReset}>
+                Сбросить
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <article className="cms-panel">
+          <div className="cms-panel__label">Предпросмотр</div>
+          <div className="cms-preview-card">
+            <div className="eyebrow">{draft.house.eyebrow}</div>
+            <h2 className="cms-preview-card__title">{draft.house.title}</h2>
+            <p className="cms-preview-card__text">{draft.house.paragraphOne}</p>
 
             <div className="cms-preview-divider" />
 
-            <div className="cms-preview-card__label">SEO collections</div>
-            <div className="cms-preview-card__text">{draft.seo.collections.title}</div>
-            <div className="cms-preview-card__text">{draft.seo.collections.description}</div>
+            <div className="cms-preview-card__label">{draft.contact.eyebrow}</div>
+            <div className="cms-preview-card__text">{draft.contact.title}</div>
+            <div className="cms-preview-card__text">{draft.contact.email}</div>
           </div>
         </article>
       </div>
@@ -696,9 +857,9 @@ function ProductsView({
 
         <article className="cms-panel">
           <div className="cms-panel__label">Товарный каталог</div>
-          <h2 className="cms-panel__title">Slug, описание и карточка управляются из панели.</h2>
+          <h2 className="cms-panel__title">Карточка товара уже подключена к CMS.</h2>
           <p className="cms-panel__text">
-            Изменения товаров сохраняются локально и используются на странице collections и главной.
+            Изменения slug, названия, описания и статуса используются в collections и product-страницах.
           </p>
 
           <div className="button-row">
@@ -927,7 +1088,7 @@ function JournalView({
   return (
     <div className="cms-stack">
       <div>
-        <div className="eyебrow">Журнал</div>
+        <div className="eyebrow">Журнал</div>
         <h1 className="page-title">Управление журналом</h1>
       </div>
 
@@ -1013,7 +1174,7 @@ function SettingsView() {
           <div className="cms-panel__label">Хранилище</div>
           <h2 className="cms-panel__title">Локальная конфигурация активна.</h2>
           <p className="cms-panel__text">
-            Главная страница и товарные карточки сохраняются в браузере и используются витриной сайта.
+            Главная страница, страницы house/contact и товарные карточки сохраняются локально.
           </p>
         </article>
       </div>
@@ -1180,6 +1341,15 @@ export default function AtelierPortalPage() {
                 onAdd={handleAddProduct}
                 onUpdate={handleUpdateProduct}
                 onSave={handleSaveProducts}
+              />
+            )}
+
+            {section === 'pages' && (
+              <PagesView
+                locale={locale}
+                snapshot={cmsStore[locale]}
+                onSave={handleSaveSnapshot}
+                onReset={handleResetSnapshot}
               />
             )}
 
