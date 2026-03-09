@@ -2,9 +2,9 @@ import { ProductDetailClient } from '../../../components/product/ProductDetailCl
 import { defaultCmsProducts } from '../../../lib/cms-store'
 
 type ProductPageProps = {
-  params: {
+  params: Promise<{
     slug: string
-  }
+  }>
 }
 
 export function generateStaticParams() {
@@ -13,6 +13,8 @@ export function generateStaticParams() {
   }))
 }
 
-export default function ProductPage({ params }: ProductPageProps) {
-  return <ProductDetailClient slug={params.slug} locale="ru" />
+export default async function ProductPage({ params }: ProductPageProps) {
+  const { slug } = await params
+
+  return <ProductDetailClient slug={slug} locale="ru" />
 }
