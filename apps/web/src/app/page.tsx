@@ -1,12 +1,21 @@
+'use client'
+
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { Hero } from '../components/site/Hero'
+import { defaultCmsSnapshot, readCmsSnapshot, type CmsSnapshot } from '../lib/cms-store'
 import { getSiteContent } from '../lib/site-data'
-import { defaultCmsSnapshot } from '../lib/cms-store'
 
 export default function HomePage() {
   const siteData = getSiteContent('ru')
   const featured = siteData.products[0]
-  const home = defaultCmsSnapshot.home
+  const [cmsSnapshot, setCmsSnapshot] = useState<CmsSnapshot>(defaultCmsSnapshot)
+
+  useEffect(() => {
+    setCmsSnapshot(readCmsSnapshot())
+  }, [])
+
+  const home = cmsSnapshot.home
 
   return (
     <>
