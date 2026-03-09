@@ -3,26 +3,42 @@
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { Hero } from '../components/site/Hero'
-import { defaultCmsStore, readCmsSnapshotByLocale, type CmsSnapshot } from '../lib/cms-store'
+import {
+  defaultCmsProducts,
+  defaultCmsStore,
+  readCmsProducts,
+  readCmsSnapshotByLocale,
+  type CmsProduct,
+  type CmsSnapshot
+} from '../lib/cms-store'
 import { getSiteContent } from '../lib/site-data'
 
 export default function HomePage() {
   const siteData = getSiteContent('ru')
   const [cmsSnapshot, setCmsSnapshot] = useState<CmsSnapshot>(defaultCmsStore.ru)
+  const [cmsProducts, setCmsProducts] = useState<CmsProduct[]>(defaultCmsProducts)
 
   useEffect(() => {
     setCmsSnapshot(readCmsSnapshotByLocale('ru'))
+    setCmsProducts(readCmsProducts())
   }, [])
 
   const home = cmsSnapshot.home
   const sections = cmsSnapshot.sections
 
+  const publishedProducts = useMemo(
+    () => cmsProducts.filter((item) => item.status === 'Опубликовано'),
+    [cmsProducts]
+  )
+
   const featured = useMemo(() => {
     return (
-      siteData.products.find((item) => item.slug === cmsSnapshot.featuredProductSlug) ??
-      siteData.products[0]
+      publishedProducts.find((item) => item.slug === cmsSnapshot.featuredProductSlug) ??
+      publishedProducts[0]
     )
-  }, [cmsSnapshot.featuredProductSlug, siteData.products])
+  }, [cmsSnapshot.featuredProductSlug, publishedProducts])
+
+  const spotlights = cmsSnapshot.spotlights
 
   return (
     <>
@@ -94,7 +110,7 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid--3" style={{ marginTop: 34 }}>
-              {siteData.products.map((item) => (
+              {publishedProducts.map((item) => (
                 <article key={item.slug} className="card">
                   <div className="card__media card__media--soft" />
 
@@ -150,41 +166,20 @@ export default function HomePage() {
             </div>
 
             <div className="editorial-grid">
-              <article className="editorial-card editorial-card--tall">
-                <div className="editorial-card__overlay" />
+              {spotlights.map((item, index) => (
+                <article
+                  key={`${item.title}-${index}`}
+                  className={`editorial-card ${index === 0 ? 'editorial-card--tall' : 'editorial-card--soft'}`}
+                >
+                  <div className="editorial-card__overlay" />
 
-                <div className="editorial-card__content">
-                  <div className="editorial-card__eyebrow">COLLECTION</div>
-                  <h3 className="editorial-card__title">Noir Atelier</h3>
-                  <p className="editorial-card__text">
-                    Глубокий чёрный, строгая геометрия силуэта и структурный outerwear.
-                  </p>
-                </div>
-              </article>
-
-              <article className="editorial-card editorial-card--soft">
-                <div className="editorial-card__overlay" />
-
-                <div className="editorial-card__content">
-                  <div className="editorial-card__eyebrow">PRIVATE</div>
-                  <h3 className="editorial-card__title">Private Capsule</h3>
-                  <p className="editorial-card__text">
-                    Ограниченные релизы для коллекционного формата luxury.
-                  </p>
-                </div>
-              </article>
-
-              <article className="editorial-card editorial-card--soft">
-                <div className="editorial-card__overlay" />
-
-                <div className="editorial-card__content">
-                  <div className="editorial-card__eyebrow">EVENING</div>
-                  <h3 className="editorial-card__title">Evening Study</h3>
-                  <p className="editorial-card__text">
-                    Текучие вечерние формы, построенные на тишине и балансе.
-                  </p>
-                </div>
-              </article>
+                  <div className="editorial-card__content">
+                    <div className="editorial-card__eyebrow">{item.eyebrow}</div>
+                    <h3 className="editorial-card__title">{item.title}</h3>
+                    <p className="editorial-card__text">{item.text}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
